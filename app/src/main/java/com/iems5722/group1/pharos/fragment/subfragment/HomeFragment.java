@@ -17,7 +17,7 @@ import com.iems5722.group1.pharos.R;
  * Description: HomeFragment
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
     public static HomeFragment newInstance(String s){
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();

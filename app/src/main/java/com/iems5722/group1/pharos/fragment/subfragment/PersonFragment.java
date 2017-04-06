@@ -11,13 +11,8 @@ import android.widget.TextView;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 
-/**
- * Created by Kevin on 2016/11/28.
- * Blog:http://blog.csdn.net/student9128
- * Description:
- */
 
-public class PersonFragment extends Fragment {
+public class PersonFragment extends Fragment{
     public static PersonFragment newInstance(String s){
         PersonFragment homeFragment = new PersonFragment();
         Bundle bundle = new Bundle();

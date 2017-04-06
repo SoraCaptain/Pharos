@@ -17,7 +17,7 @@ import com.iems5722.group1.pharos.R;
  * Description:
  */
 
-public class LocationFragment extends Fragment {
+public class LocationFragment extends Fragment{
     public static LocationFragment newInstance(String s){
         LocationFragment homeFragment = new LocationFragment();
         Bundle bundle = new Bundle();

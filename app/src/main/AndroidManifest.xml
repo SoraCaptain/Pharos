@@ -17,6 +17,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".module.chatrooms.ChatRoomListActivity"
+            android:label="@string/module_chatRoom_title"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+        </activity>
+        <activity
+            android:name=".module.contact.ContactActivity"
+            android:label="@string/module_contact_title"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+        </activity>
+        <activity
+            android:name=".module.favorite.FavActivity"
+            android:label="@string/module_fav_title"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+        </activity>
+        <activity
+            android:name=".module.SettingsActivity"
+            android:label="@string/module_settings_title"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+        </activity>
     </application>
 
 </manifest>

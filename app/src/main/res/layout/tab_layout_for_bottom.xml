@@ -23,10 +23,10 @@
         android:text="@string/item_location"/>
 
     <TextView
-        android:id="@+id/tv_like"
+        android:id="@+id/tv_forum"
         style="@style/viewpager_navigation_bar_tab_style"
-        android:drawableTop="@drawable/like"
-        android:text="@string/item_like"/>
+        android:drawableTop="@drawable/forum"
+        android:text="@string/item_forum"/>
 
     <TextView
         android:id="@+id/tv_person"

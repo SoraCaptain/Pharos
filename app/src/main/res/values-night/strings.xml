@@ -5,11 +5,9 @@
     <string name="blog_site">Blog:http://blog.csdn.net/student9128</string>
     <string name="nick_name">Kevin</string>
     <string name="tips">Hello</string>
-    <string name="navigation_navigation_bar">NavigationBar</string>
-    <string name="navigation_radio_bar">RadioGroup</string>
-    <string name="navigation_tab_layout">TabLayout + ViewPager</string>
-    <string name="navigation_tab_layout2">TabLayout + ViewPager 2</string>
-    <string name="navigation_text_tab">TextView + LinearLayout</string>
+    <string name="navigation_chat_list">Chatroom list</string>
+    <string name="navigation_contact">Contact</string>
+    <string name="navigation_fav">Favorite</string>
     <string name="navigation_tab_host">TabHost</string>
 
     <string name="item_home">Home</string>

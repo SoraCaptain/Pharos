@@ -1,5 +1,6 @@
 package com.iems5722.group1.pharos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -19,11 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
-import com.iems5722.group1.pharos.fragment.RadioFragment;
-import com.iems5722.group1.pharos.fragment.TabLayoutFragment;
-import com.iems5722.group1.pharos.fragment.TabLayoutFragment2;
-import com.iems5722.group1.pharos.fragment.TextTabFragment;
-import com.iems5722.group1.pharos.utils.SnackBarUtils;
+import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
+import com.iems5722.group1.pharos.module.contact.ContactActivity;
+import com.iems5722.group1.pharos.module.favorite.FavActivity;
+import com.iems5722.group1.pharos.module.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private DrawerLayout mDrawerLayout;
@@ -31,12 +31,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
-    private RadioFragment mRadioFragment;
     private LinearLayout mRadioBadge;//the badge for radioGroup menu
     private TextView mRadioMsg;
-    private TextTabFragment mTextTabFragment;
-    private TabLayoutFragment mTabLayoutFragment;
-    private TabLayoutFragment2 mTabLayoutFragment2;
     private NightModeHelper mNightModeHelper;
 
     @Override
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setNavigationViewChecked(int position) {
         mNavigationView.getMenu().getItem(position).setChecked(true);
-        Log.i("Kevin", "the count of menu item is--->" + mNavigationView.getMenu().size() + "");
+        Log.i("Pharos", "the count of menu item is--->" + mNavigationView.getMenu().size() + "");
         for (int i = 0; i < mNavigationView.getMenu().size(); i++) {
             if (i != position) {
                 mNavigationView.getMenu().getItem(i).setChecked(false);
@@ -84,58 +80,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setCurrentFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        mNavigationFragment = NavigationFragment.newInstance(getString(R.string.navigation_navigation_bar));
+        mNavigationFragment = NavigationFragment.newInstance(getString(R.string.navigation_chat_list));
         transaction.replace(R.id.frame_content, mNavigationFragment).commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Intent intent = new Intent();
+        Class context = null;
         switch (item.getItemId()) {
-            case R.id.menu_bottom_navigation_bar:
-                if (mNavigationFragment == null) {
-                    mNavigationFragment = NavigationFragment.newInstance(getString(R.string.navigation_navigation_bar));
-                }
-                transaction.replace(R.id.frame_content, mNavigationFragment);
-                Snackbar.make(mDrawerLayout, "NavigationBar", Snackbar.LENGTH_SHORT).show();
+            case R.id.menu_chat_list:
+                context = ChatRoomListActivity.class;
                 setNavigationViewChecked(0);
                 break;
-            case R.id.menu_radio_group:
-                if (mRadioFragment == null) {
-                    mRadioFragment = RadioFragment.newInstance(getString(R.string.navigation_radio_bar));
-                }
-                transaction.replace(R.id.frame_content, mRadioFragment);
-//                Snackbar.make(mDrawerLayout, "RadioGroup", Snackbar.LENGTH_SHORT).show();
-                SnackBarUtils.showSnackBar(mDrawerLayout, getString(R.string.navigation_radio_bar), this);
+            case R.id.menu_contact:
+                context = ContactActivity.class;
                 setNavigationViewChecked(1);
                 break;
-            case R.id.menu_text_view:
-                if (mTextTabFragment == null) {
-                    mTextTabFragment = TextTabFragment.newInstance(getString(R.string.navigation_text_tab));
-                }
-                transaction.replace(R.id.frame_content, mTextTabFragment);
-                Snackbar.make(mDrawerLayout, "TextView + LinearLayout", Snackbar.LENGTH_SHORT).show();
+            case R.id.menu_fav:
+                context = FavActivity.class;
                 setNavigationViewChecked(2);
                 break;
-            case R.id.menu_tab_layout:
-                if(mTabLayoutFragment == null){
-                mTabLayoutFragment = TabLayoutFragment.newInstance(getString(R.string.navigation_tab_layout));
-                }
-                transaction.replace(R.id.frame_content, mTabLayoutFragment);
+            case R.id.menu_setting:
+                context = SettingsActivity.class;
                 setNavigationViewChecked(3);
-                Snackbar.make(mDrawerLayout, "TabLayout + ViewPager", Snackbar.LENGTH_SHORT).show();
                 break;
-            case R.id.menu_tab_layout2:
-                if (mTabLayoutFragment2 == null) {
-                    mTabLayoutFragment2 = TabLayoutFragment2.newInstance(getString(R.string.navigation_tab_layout2));
-                }
-                transaction.replace(R.id.frame_content, mTabLayoutFragment2);
-                setNavigationViewChecked(4);
-                Snackbar.make(mDrawerLayout, "TabLayout + ViewPager 2", Snackbar.LENGTH_SHORT).show();
-                break;
-
 
         }
+        intent.setClass(MainActivity.this, context);
+        startActivity(intent);
         mDrawerLayout.closeDrawers();
         transaction.commit();
         return true;

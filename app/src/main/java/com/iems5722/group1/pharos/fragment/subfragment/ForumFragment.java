@@ -17,9 +17,9 @@ import com.iems5722.group1.pharos.R;
  * Description:
  */
 
-public class LikeFragment extends Fragment {
-    public static LikeFragment newInstance(String s){
-        LikeFragment homeFragment = new LikeFragment();
+public class ForumFragment extends Fragment{
+    public static ForumFragment newInstance(String s){
+        ForumFragment homeFragment = new ForumFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.ARGS,s);
         homeFragment.setArguments(bundle);

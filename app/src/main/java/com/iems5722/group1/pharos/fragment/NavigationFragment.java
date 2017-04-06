@@ -15,7 +15,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.HomeFragment;
-import com.iems5722.group1.pharos.fragment.subfragment.LikeFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.ForumFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.LocationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.PersonFragment;
 
@@ -31,7 +31,7 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
     private BottomNavigationBar mBottomNavigationBar;
     private HomeFragment mHomeFragment;
     private LocationFragment mLocationFragment;
-    private LikeFragment mLikeFragment;
+    private ForumFragment mLikeFragment;
     private PersonFragment mPersonFragment;
     private TextView mTextView;
 
@@ -61,7 +61,7 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
 
         mBottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.home_fill, getString(R.string.item_home)).setInactiveIconResource(R.drawable.home).setActiveColorResource(R.color.colorPrimary).setInActiveColorResource(R.color.black_1))
                 .addItem(new BottomNavigationItem(R.drawable.location_fill, getString(R.string.item_location)).setInactiveIconResource(R.drawable.location).setActiveColorResource(R.color.colorPrimary).setInActiveColorResource(R.color.black_1))
-                .addItem(new BottomNavigationItem(R.drawable.like_fill, getString(R.string.item_like)).setInactiveIconResource(R.drawable.like).setActiveColorResource(R.color.colorPrimary).setInActiveColorResource(R.color.black_1))
+                .addItem(new BottomNavigationItem(R.drawable.forum_fill, getString(R.string.item_forum)).setInactiveIconResource(R.drawable.forum).setActiveColorResource(R.color.colorPrimary).setInActiveColorResource(R.color.black_1))
                 .addItem(new BottomNavigationItem(R.drawable.person_fill, getString(R.string.item_person)).setInactiveIconResource(R.drawable.person).setActiveColorResource(R.color.colorPrimary).setInActiveColorResource(R.color.black_1))
                 .setFirstSelectedPosition(0)
                 .initialise();
@@ -103,7 +103,7 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
                 break;
             case 2:
                 if (mLikeFragment == null) {
-                    mLikeFragment = LikeFragment.newInstance(getString(R.string.item_like));
+                    mLikeFragment = ForumFragment.newInstance(getString(R.string.item_like));
                 }
                 beginTransaction.replace(R.id.sub_content, mLikeFragment);
                 break;
