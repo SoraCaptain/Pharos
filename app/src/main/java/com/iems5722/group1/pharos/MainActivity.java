@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
-    private LinearLayout mRadioBadge;//the badge for radioGroup menu
-    private TextView mRadioMsg;
     private NightModeHelper mNightModeHelper;
 
     @Override
@@ -60,9 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setItemTextColor(ContextCompat.getColorStateList(this, R.color.bg_drawer_navigation));
         mNavigationView.setItemIconTintList(ContextCompat.getColorStateList(this, R.color.bg_drawer_navigation));
-//        mRadioBadge = (LinearLayout) mNavigationView.getMenu().findItem(R.id.menu_radio_group).getActionView();
-//        mRadioMsg = (TextView) mRadioBadge.findViewById(R.id.msg);
-//        mRadioMsg.setText("8");
+
         setNavigationViewChecked(0);
         setCurrentFragment();
 

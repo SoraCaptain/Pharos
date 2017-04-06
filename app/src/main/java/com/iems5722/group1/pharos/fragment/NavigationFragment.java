@@ -17,7 +17,7 @@ import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.HomeFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.ForumFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.LocationFragment;
-import com.iems5722.group1.pharos.fragment.subfragment.PersonFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.person.PersonFragment;
 
 /**
  * Created by Kevin on 2016/11/28.
@@ -31,7 +31,7 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
     private BottomNavigationBar mBottomNavigationBar;
     private HomeFragment mHomeFragment;
     private LocationFragment mLocationFragment;
-    private ForumFragment mLikeFragment;
+    private ForumFragment mForumFragment;
     private PersonFragment mPersonFragment;
     private TextView mTextView;
 
@@ -102,10 +102,10 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
                 beginTransaction.replace(R.id.sub_content, mLocationFragment);
                 break;
             case 2:
-                if (mLikeFragment == null) {
-                    mLikeFragment = ForumFragment.newInstance(getString(R.string.item_like));
+                if (mForumFragment == null) {
+                    mForumFragment = ForumFragment.newInstance(getString(R.string.item_forum));
                 }
-                beginTransaction.replace(R.id.sub_content, mLikeFragment);
+                beginTransaction.replace(R.id.sub_content, mForumFragment);
                 break;
             case 3:
                 if (mPersonFragment == null) {

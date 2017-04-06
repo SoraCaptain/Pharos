@@ -11,11 +11,6 @@ import android.widget.TextView;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 
-/**
- * Created by Kevin on 2016/11/28.
- * Blog:http://blog.csdn.net/student9128
- * Description:
- */
 
 public class ForumFragment extends Fragment{
     public static ForumFragment newInstance(String s){
@@ -24,7 +19,7 @@ public class ForumFragment extends Fragment{
         bundle.putString(Constants.ARGS,s);
         homeFragment.setArguments(bundle);
         return homeFragment;
-}
+    }
 
     @Nullable
     @Override

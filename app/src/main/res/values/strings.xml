@@ -19,4 +19,5 @@
     <string name="item_location">Location</string>
     <string name="item_forum">Forum</string>
     <string name="item_person">Me</string>
+    <string name="module_login_title">Login</string>
 </resources>

@@ -45,6 +45,13 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             >
         </activity>
+        <activity
+            android:name=".fragment.subfragment.person.personLogin"
+            android:label="@string/module_login_title"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            >
+        </activity>
     </application>
 
 </manifest>
