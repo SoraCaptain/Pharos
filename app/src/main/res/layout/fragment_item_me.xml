@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -11,16 +11,25 @@
         android:layout_height="180dp"
         android:id="@+id/lr"
         android:paddingBottom="5dp"
-        android:paddingTop="90dp"
+        android:paddingTop="100dp"
         android:background="@drawable/me_bg"
         android:text="login/register"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textAlignment="center"
         android:shadowColor="#40000000"
-        android:shadowDx="5"
-        android:shadowDy="5"
+        android:shadowDx="4"
+        android:shadowDy="4"
         android:shadowRadius="3"
-        />
 
-</LinearLayout>
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnExit"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="exit"/>
+</RelativeLayout>

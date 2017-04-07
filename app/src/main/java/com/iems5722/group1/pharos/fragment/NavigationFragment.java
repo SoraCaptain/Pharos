@@ -1,5 +1,6 @@
 package com.iems5722.group1.pharos.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import com.iems5722.group1.pharos.fragment.subfragment.HomeFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.ForumFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.LocationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.person.PersonFragment;
+
+import static android.content.Intent.getIntent;
 
 /**
  * Created by Kevin on 2016/11/28.
@@ -126,5 +129,17 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
     @Override
     public void onTabReselected(int position) {
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Intent intent = getActivity().getIntent();
+        int id = intent.getIntExtra("id", 0);
+        if (id == 3) {
+            FragmentTransaction beginTransaction = getFragmentManager().beginTransaction();
+            beginTransaction.replace(R.id.sub_content,PersonFragment.newInstance(getString(R.string.item_person)));
+            beginTransaction.commit();
+        }
     }
 }
