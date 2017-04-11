@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:fastScrollEnabled="true"
             android:divider="@null"
-            android:layout_above="@+id/edit_message"
 
             />
 

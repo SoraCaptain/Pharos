@@ -72,7 +72,7 @@ public class LvAdapter_Notice_List extends BaseAdapter {
         viewHolder.btnRefuse.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Log.e("click","accept");
+                Log.e("click","refuse");
             }
         });
         return convertView;

@@ -32,15 +32,15 @@ public class PersonNoticeList extends AppCompatActivity {
     private List<Entity_Notice_List> dataArrays = new ArrayList();
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_item_me_login);
+        setContentView(R.layout.fragment_me_notice_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        listView = (ListView)findViewById(R.id.lv_chatroom);
+        listView = (ListView)findViewById(R.id.lv);
         adapter = new LvAdapter_Notice_List(PersonNoticeList.this,dataArrays);
-        listView.setAdapter(adapter);
+
         TaskGetNoticeList taskGetNoticeList = new TaskGetNoticeList(Util.getUsername(this));
-       taskGetNoticeList.execute();
+        taskGetNoticeList.execute();
     }
 
     class TaskGetNoticeList extends AsyncTask<String, Integer, List<Entity_Notice_List>> {
@@ -64,6 +64,7 @@ public class PersonNoticeList extends AppCompatActivity {
 
         protected void onPostExecute(List<Entity_Notice_List> result) {
             super.onPostExecute(result);
+            listView.setAdapter(adapter);
             for (Entity_Notice_List en : result) {
                 dataArrays.add(en);
                 adapter.notifyDataSetChanged();
@@ -111,7 +112,7 @@ public class PersonNoticeList extends AppCompatActivity {
                         entity.action = Integer.valueOf(jsonObject2.getString("action"));
                         entity.content = jsonObject2.getString("content");
                         entity.readStatus = Integer.valueOf(jsonObject2.getString("readStatus"));
-                        entity.handleStatus = Integer.valueOf(jsonObject2.getString("headleStatus"));
+                        entity.handleStatus = Integer.valueOf(jsonObject2.getString("handleStatus"));
                         //添加对象，组建集合
                         newNoticeList.add(entity);
                     }
