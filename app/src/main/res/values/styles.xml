@@ -91,4 +91,12 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+        <declare-styleable name="CustomShapTextView">
+            <!-- Default Paint Color (color). -->
+            <attr name="paintNormalColor" format="reference|color"/>
+            <!-- Selected Paint Color (color). -->
+            <attr name="paintSelectColor" format="reference|color"/>
+        </declare-styleable>
+
+
 </resources>

@@ -22,12 +22,6 @@ import com.iems5722.group1.pharos.fragment.subfragment.person.PersonFragment;
 
 import static android.content.Intent.getIntent;
 
-/**
- * Created by Kevin on 2016/11/28.
- * Blog:http://blog.csdn.net/student9128
- * Description: Bottom Navigation Bar by BottomNavigationBar
- */
-
 public class NavigationFragment extends Fragment implements BottomNavigationBar.OnTabSelectedListener {
 
 

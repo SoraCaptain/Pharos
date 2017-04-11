@@ -21,8 +21,19 @@
         android:shadowDx="4"
         android:shadowDy="4"
         android:shadowRadius="3"
-
         />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv"
+        android:fastScrollEnabled="true"
+        android:layout_below="@id/lr"
+        android:layout_marginTop="20dp"
+        />
+
+
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

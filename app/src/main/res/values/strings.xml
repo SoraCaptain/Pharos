@@ -7,6 +7,7 @@
     <string name="tips">Hello</string>
     <string name="navigation_chat_list">Chatroom list</string>
     <string name="navigation_contact">Contact</string>
+    <string name="module_contact_add_title">Search User</string>
     <string name="navigation_fav">Favorite</string>
     <string name="navigation_setting">Setting</string>
 
@@ -19,5 +20,7 @@
     <string name="item_location">Location</string>
     <string name="item_forum">Forum</string>
     <string name="item_person">Me</string>
-    <string name="module_login_title">Login</string>
+    <string name="module_login_title">Login/Register</string>
+    <string name="module_notification">notification</string>
+    <string name="action_plus">plus</string>
 </resources>

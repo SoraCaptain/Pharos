@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgNote"
+        android:src="@drawable/notice"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_msg"
+        android:layout_toRightOf="@id/imgNote"
+        android:layout_marginStart="10dp"
+        android:text="messages box"
+        android:paddingTop="10dp"
+        android:textSize="25sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_msg_num"
+        android:background="@drawable/msg_num_shape"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/tv_msg"
+        android:paddingTop="10dp"
+        android:paddingEnd="5dp"
+        android:textColor="#0000FF"
+        android:text="1"/>
+</RelativeLayout>
+    <!--android:paddingStart="12dp"-->
+    <!---->
+    <!--android:layout_marginStart="10dp"-->
+    <!---->
