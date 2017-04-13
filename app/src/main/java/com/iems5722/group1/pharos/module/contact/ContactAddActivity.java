@@ -99,6 +99,7 @@ public class ContactAddActivity extends AppCompatActivity {
             if (result.equals("SUCCESS")){
                 tvResult.setVisibility(View.VISIBLE);
                 tvResult.setText(name);
+                btnAdd.setText("add as friend");
                 btnAdd.setVisibility(View.VISIBLE);
                 btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
