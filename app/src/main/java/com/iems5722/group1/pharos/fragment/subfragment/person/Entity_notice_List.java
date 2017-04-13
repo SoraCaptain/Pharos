@@ -6,12 +6,14 @@ package com.iems5722.group1.pharos.fragment.subfragment.person;
 
 public class Entity_Notice_List {
         public int action;
+        public String owner;
         public String content;
         public int readStatus;
         public int handleStatus;
-        public Entity_Notice_List(int action, String content, int readStatus, int handleStatus) {
+        public Entity_Notice_List(int action, String owner, String content, int readStatus, int handleStatus) {
             super();
             this.action = action;
+            this.owner = owner;
             this.content = content;
             this.readStatus = readStatus;
             this.handleStatus = handleStatus;
@@ -22,11 +24,17 @@ public class Entity_Notice_List {
         public int getAction(){
             return action;
         }
-        public String getContent() {
-            return content;
+        public void setOwner(String owner) {
+        this.owner = owner;
+    }
+        public String getOwner() {
+            return owner;
         }
         public void setContent(String content) {
-            this.content = content;
+        this.content = content;
+    }
+        public String getContent() {
+            return content;
         }
         public void setReadStatus(int readStatus){this.readStatus = readStatus;}
         public int getReadStatus(){return readStatus;}

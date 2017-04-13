@@ -66,14 +66,9 @@ public class ContactAddActivity extends AppCompatActivity {
         else{
             String searchName = edSearchContent.getText().toString();
             Log.e("search",searchName);
-            TaskSearch taskSearch = new TaskSearch(searchName);
+            TaskSearch taskSearch = new TaskSearch(searchName,Util.getUsername(this));
             taskSearch.execute();
         }
-    }
-
-    public void addUser(View view){
-        TaskAdd taskAdd = new TaskAdd(edSearchContent.getText().toString());
-        taskAdd.execute();
     }
 
     class TaskSearch extends AsyncTask<String, Integer, String> {
@@ -81,9 +76,9 @@ public class ContactAddActivity extends AppCompatActivity {
         private String jsonUrl = "http://54.202.138.123:5000/pharos/api/searchUser";
         String result = "";
         String name="";
-        public TaskSearch(String name) {
-            this.name = name;
-            this.jsonUrl = this.jsonUrl + "?search_name="+name;
+        public TaskSearch(String searchName,String ownerName) {
+            this.name = searchName;
+            this.jsonUrl = this.jsonUrl + "?search_name="+searchName+"&owner_name="+ownerName;
         }
 
         @Override
@@ -105,6 +100,25 @@ public class ContactAddActivity extends AppCompatActivity {
                 tvResult.setVisibility(View.VISIBLE);
                 tvResult.setText(name);
                 btnAdd.setVisibility(View.VISIBLE);
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TaskAdd taskAdd = new TaskAdd(edSearchContent.getText().toString());
+                        taskAdd.execute();
+                    }
+                });
+            }
+            else if(result.equals("EXIST")){
+                tvResult.setVisibility(View.VISIBLE);
+                tvResult.setText(name);
+                btnAdd.setText("chat");
+                btnAdd.setVisibility(View.VISIBLE);
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
             else if(result.equals("FAIL")){
                 tvResult.setVisibility(View.INVISIBLE);
@@ -153,7 +167,7 @@ public class ContactAddActivity extends AppCompatActivity {
         String name="";
         public TaskAdd(String name) {
             this.name = name;
-            this.jsonUrl = this.jsonUrl + "?status='add'&from="+name+"&to="+ Util.getUsername(ContactAddActivity.this);
+            this.jsonUrl = this.jsonUrl + "?action=add&from=" + Util.getUsername(ContactAddActivity.this) + "&to=" + name;
         }
 
         @Override

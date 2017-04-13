@@ -1,15 +1,21 @@
 package com.iems5722.group1.pharos.fragment.subfragment.person;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.contact.ContactActivity;
+import com.iems5722.group1.pharos.module.contact.ContactAddActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -43,12 +49,23 @@ public class PersonNoticeList extends AppCompatActivity {
         taskGetNoticeList.execute();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     class TaskGetNoticeList extends AsyncTask<String, Integer, List<Entity_Notice_List>> {
         private List<Entity_Notice_List> newNoticeList;
         //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
         private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getNoticeList";
-
+        private  String name;
         TaskGetNoticeList(String name){
+            this.name = name;
             jsonUrl=jsonUrl+"?user_name="+name;
         }
         @Override
@@ -63,13 +80,14 @@ public class PersonNoticeList extends AppCompatActivity {
         }
 
         protected void onPostExecute(List<Entity_Notice_List> result) {
-            super.onPostExecute(result);
             listView.setAdapter(adapter);
             for (Entity_Notice_List en : result) {
                 dataArrays.add(en);
+                Log.e("en",en.getContent());
                 adapter.notifyDataSetChanged();
                 listView.setSelection(listView.getCount() - 1);
             }
+            super.onPostExecute(result);
         }
 
         public List<Entity_Notice_List> getJsonData(String jsonUrl) {
@@ -111,9 +129,13 @@ public class PersonNoticeList extends AppCompatActivity {
 
                         entity.action = Integer.valueOf(jsonObject2.getString("action"));
                         entity.content = jsonObject2.getString("content");
-                        entity.readStatus = Integer.valueOf(jsonObject2.getString("readStatus"));
+                        entity.owner = name;
                         entity.handleStatus = Integer.valueOf(jsonObject2.getString("handleStatus"));
                         //添加对象，组建集合
+                        Log.e("get",entity.getOwner());
+                        Log.e("get",entity.getContent());
+                        Log.e("get",String.valueOf(entity.getAction()));
+                        Log.e("get",String.valueOf(entity.getHandleStatus()));
                         newNoticeList.add(entity);
                     }
                 }

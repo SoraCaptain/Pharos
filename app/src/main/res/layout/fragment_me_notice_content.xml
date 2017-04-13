@@ -35,4 +35,18 @@
         android:textSize="12sp"
         android:text="accept"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_status"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/tv_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        android:text="Done"
+        />
+
 </RelativeLayout>

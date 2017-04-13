@@ -125,7 +125,7 @@ public class PersonFragment extends Fragment{
         private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getNoticeNum";
         String result = "";
         public TaskGetNotice(String name) {
-            this.jsonUrl = this.jsonUrl + "?to_user_name="+name;
+            this.jsonUrl = this.jsonUrl + "?receiver_name="+name;
         }
 
         @Override
@@ -143,6 +143,9 @@ public class PersonFragment extends Fragment{
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            if(result.equals("ERROR")){
+
+            }
             Entity_Person_List entity = new Entity_Person_List(1,result);
             dataArrays.add(0,entity);
             adapter = new LvAdapter_List(getActivity(),dataArrays);
