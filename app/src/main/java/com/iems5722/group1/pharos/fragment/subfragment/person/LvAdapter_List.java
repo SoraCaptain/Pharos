@@ -1,6 +1,7 @@
 package com.iems5722.group1.pharos.fragment.subfragment.person;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,6 @@ public class LvAdapter_List extends BaseAdapter {
         viewHolder.tvMsg = tvMsg;
         viewHolder.tvMsgNum = tvMsgNum;
         convertView.setTag(viewHolder);
-
         viewHolder.tvMsg.setText(entity.getContent()+" messages unread");
         if (entity.getContent().equals("0")){
             viewHolder.tvMsgNum.setVisibility(View.INVISIBLE);

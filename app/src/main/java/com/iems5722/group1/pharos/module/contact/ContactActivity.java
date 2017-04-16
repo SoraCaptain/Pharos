@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.iems5722.group1.pharos.MainActivity;
@@ -44,6 +46,16 @@ public class ContactActivity extends AppCompatActivity {
         adapter = new LvAdapter_Contact(ContactActivity.this,dataArrays);
         TaskGetFriendList taskGetFriendList = new TaskGetFriendList(Util.getUsername(this));
         taskGetFriendList.execute();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.putExtra("friend_id", dataArrays.get(position).getID());
+                intent.putExtra("friend_name", dataArrays.get(position).getName());
+                intent.setClass(ContactActivity.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

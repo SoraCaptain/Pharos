@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="hk.edu.cuhk.ie.iems5722.a4_1155080877.Chat_Activity"
+    >
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            />
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="56dp">
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fastScrollEnabled="true"
+            android:divider="@null"
+            android:layout_above="@+id/edit_message"
+
+            />
+
+            <EditText
+                android:id="@+id/edit_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/button_send"
+                android:layout_alignParentStart="true"
+                android:hint="@string/edit_message"
+                />
+            <ImageButton
+                android:background="@drawable/img_send"
+                android:id="@+id/button_send"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/btn_send"
+                android:onClick="sendMessage"
+                android:clickable="true"/>
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

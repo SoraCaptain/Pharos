@@ -1,5 +1,6 @@
 package com.iems5722.group1.pharos;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,11 +20,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
 import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.module.contact.ContactActivity;
 import com.iems5722.group1.pharos.module.favorite.FavActivity;
 import com.iems5722.group1.pharos.module.SettingsActivity;
+import com.iems5722.group1.pharos.utils.Util;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private DrawerLayout mDrawerLayout;
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setNavigationViewChecked(0);
         setCurrentFragment();
 
+        Util.checkToken(this);
     }
 
     private void setNavigationViewChecked(int position) {
@@ -143,4 +148,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+
+    public boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if(status != ConnectionResult.SUCCESS) {
+            if(googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
+            }
+            return false;
+        }
+        return true;
+    }
 }

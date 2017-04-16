@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "926387700269",
+    "firebase_url": "https://pharos-44ea8.firebaseio.com",
+    "project_id": "pharos-44ea8",
+    "storage_bucket": "pharos-44ea8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926387700269:android:03072792171c6c6b",
+        "android_client_info": {
+          "package_name": "com.iems5722.group1.pharos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926387700269-k0hp8fbut87tgij7tlr6rfspl9qg1tni.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcTp5jnpF1bMcOnaI_CMO5y8l8e3rJxCM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

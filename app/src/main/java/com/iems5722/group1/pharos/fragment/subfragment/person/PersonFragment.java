@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.contact.ChatActivity;
 import com.iems5722.group1.pharos.module.contact.ContactAddActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
@@ -53,6 +54,7 @@ public class PersonFragment extends Fragment{
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_item_me, container, false);
+        Util.checkToken(getActivity());
         Bundle bundle = getArguments();
         final String s = Util.getUsername(getActivity());
         textView = (TextView) view.findViewById(R.id.lr);
@@ -93,7 +95,9 @@ public class PersonFragment extends Fragment{
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("click","button");
+                Log.e("click",Util.getUsername(getActivity()));
+                TaskDeleteToken taskDeleteToken = new TaskDeleteToken(Util.getUsername(getActivity()));
+                taskDeleteToken.execute();
                 btnExit.setVisibility(View.INVISIBLE);
                 listView.setVisibility(View.INVISIBLE);
                 Util.setUserName("null",getActivity());
@@ -186,4 +190,65 @@ public class PersonFragment extends Fragment{
         }
     }
 
+    class TaskDeleteToken extends AsyncTask<String, Integer, String> {
+
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/deleteToken";
+
+        public TaskDeleteToken(String username) {
+            Log.e("username ",username);
+            this.jsonUrl = this.jsonUrl + "?user_name=" + username;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.i("GET", "onPostExecute " + result);
+        }
+
+        public String getJsonData(String jsonUrl) {
+            String result = "";
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+
+                // 整体是一个jsonObject
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                result = jsonObject.getString("status");
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+    }
 }

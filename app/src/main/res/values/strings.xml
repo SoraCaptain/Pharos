@@ -12,6 +12,11 @@
     <string name="navigation_setting">Setting</string>
 
     <string name="module_chatRoom_title">ChatRoom_List</string>
+    <string name="action_refresh">refresh</string>
+    <string name="edit_message">input</string>
+    <string name="btn_send">send</string>
+    <string name="room_title">Chat_Room</string>
+
     <string name="module_contact_title">Contact</string>
     <string name="module_fav_title">Favorite</string>
     <string name="module_settings_title">Settings</string>
