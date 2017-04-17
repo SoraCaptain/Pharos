@@ -42,6 +42,7 @@ public class Util {
         editor.apply();
     }
 
+
     public static void delUserName(String name,Context context){
         sharedPreferences= context.getSharedPreferences(Constants.PREFS_USERNAME_SAVE,
                 Context.MODE_PRIVATE);

@@ -1,7 +1,14 @@
 package com.iems5722.group1.pharos.module.contact;
 
+import android.app.ActivityManager;
+import android.app.Service;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,8 +22,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.Transaction;
+import com.google.firebase.messaging.RemoteMessage;
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
+import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.utils.Util;
 
@@ -33,11 +43,11 @@ import java.util.List;
 
 /**
  * Created by Sora on 27/1/17.
- */
+ **/
 
 public class ChatActivity extends AppCompatActivity {
     EditText edt_input;
-    private ListView listView;
+    ListView listView;
     LvAdapter_Msg adapter;
     List<Entity_Get_Msg> dataArrays = new ArrayList();
     String friendName;
@@ -46,6 +56,9 @@ public class ChatActivity extends AppCompatActivity {
     TaskGetMsgL getMsgL;
     String postContent = "";
     String userName;
+    static String comMsg;
+    static String comName;
+    static int newCome = 0;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.module_chat_room);
@@ -71,7 +84,6 @@ public class ChatActivity extends AppCompatActivity {
 
         TaskGetChatroomId taskGetChatroomId = new TaskGetChatroomId(friendId);
         taskGetChatroomId.execute();
-
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -101,6 +113,32 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final Handler mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                update(comMsg,comName);
+            }
+        };
+
+        Runnable mRunnable = new Runnable() {
+            public void run() {
+                while(true) {
+                    try {
+                        if(newCome==1){
+                            Log.e("chat test ","go");
+                            mHandler.sendMessage(mHandler.obtainMessage());
+                            Thread.sleep(1000);
+                            newCome=0;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        new Thread(mRunnable).start();
     }
 
     private boolean listIsAtTop()   {
@@ -159,7 +197,7 @@ public class ChatActivity extends AppCompatActivity {
             entity.setMessage(content);
             entity.setUserName(userName);
             entity.setTimestamp(getDate());
-            entity.setMsgType(false);
+            entity.setMsgType(true);
             dataArrays.add(entity);
             adapter.notifyDataSetChanged();
             edt_input.setText("");
@@ -280,11 +318,46 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    public static void setMsgNum(int msgNum,String msg,String senderName){
+        Log.e("chat ","test");
+        newCome=msgNum;
+        comMsg = msg;
+        comName = senderName;
+    }
+
+    public void update(String msg,String sender_name){
+        Entity_Get_Msg entity = new Entity_Get_Msg();
+        entity.setMessage(msg);
+        entity.setUserName(sender_name);
+        entity.setTimestamp(getDate());
+        entity.setMsgType(true);
+        dataArrays.add(entity);
+        adapter.notifyDataSetChanged();
+        edt_input.setText("");
+        listView.setSelection(listView.getCount()-1);
+    }
+
+    public static boolean isAppRunningForeground(Context context){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Service.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList = activityManager.getRunningAppProcesses();
+        if (runningAppProcessInfoList==null){
+            return false;
+        }
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcessInfoList) {
+            if (processInfo.processName.equals(context.getPackageName())
+                    && processInfo.importance==ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     class TaskGetMsgL extends AsyncTask<String, Integer, List<Entity_Get_Msg>> {
         private List<Entity_Get_Msg> newMsgList;
         private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getMessages";
-        String pageNum="1";
-        String curPage="1";
+        String pageNum = "1";
+        String curPage = "1";
 
         public TaskGetMsgL(String id, String page) {
             this.jsonUrl = this.jsonUrl + "?chatroom_id=" + id + "&page=" + page;
@@ -317,12 +390,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
 
-        public String getCurPage(){
+        public String getCurPage() {
             return curPage;
         }
 
-        public String getPageNum(){
-            return  pageNum;
+        public String getPageNum() {
+            return pageNum;
         }
 
         public List<Entity_Get_Msg> getJsonData(String jsonUrl) {
@@ -351,7 +424,7 @@ public class ChatActivity extends AppCompatActivity {
                 newMsgList = new ArrayList<Entity_Get_Msg>();
                 // 整体是一个jsonObject
                 JSONObject jsonObject = new JSONObject(sb.toString());
-                if(jsonObject.getString("status").equals("OK")) {
+                if (jsonObject.getString("status").equals("OK")) {
                     // 键是jsonArray数组
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -377,6 +450,4 @@ public class ChatActivity extends AppCompatActivity {
             return newMsgList;
         }
     }
-
-
 }

@@ -3,6 +3,7 @@ package com.iems5722.group1.pharos;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setCurrentFragment();
 
         Util.checkToken(this);
+
+//        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+//        startActivity(intent);
     }
 
     private void setNavigationViewChecked(int position) {

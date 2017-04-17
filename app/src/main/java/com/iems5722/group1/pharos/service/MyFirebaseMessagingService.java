@@ -4,8 +4,10 @@ package com.iems5722.group1.pharos.service;
  * Created by Sora on 18/3/17.
  */
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -16,6 +18,10 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import com.iems5722.group1.pharos.MainActivity;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.contact.ChatActivity;
+import com.iems5722.group1.pharos.utils.Util;
+
+import java.util.List;
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -53,8 +59,9 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
+        ChatActivity.setMsgNum(1,remoteMessage.getNotification().getBody(),remoteMessage.getNotification().getTitle());
 
-        sendNotification(remoteMessage);
+        //sendNotification(remoteMessage);
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -71,18 +78,11 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-        String message = msg.getNotification().getBody();
-        String[] content = message.split("&");
-        String room_id = content[0].split("=")[1];
-        String mes = content[1].split("=")[1];
-        Log.e("mes ",mes);
-        String timestamp = content[2].split("=")[1];
-        Log.e("timestamp ",timestamp);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(msg.getNotification().getTitle())
-                .setContentText(mes)
+                .setContentText(msg.getNotification().getBody())
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
@@ -92,4 +92,5 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
 }
