@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.iems5722.group1.pharos.MainActivity;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.person.Entity_Notice_List;
+import com.iems5722.group1.pharos.module.chat.ChatActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;

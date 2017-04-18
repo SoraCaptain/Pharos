@@ -1,14 +1,12 @@
-package com.iems5722.group1.pharos.module.contact;
+package com.iems5722.group1.pharos.module.chat;
 
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,11 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.Transaction;
-import com.google.firebase.messaging.RemoteMessage;
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
-import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.utils.Util;
 

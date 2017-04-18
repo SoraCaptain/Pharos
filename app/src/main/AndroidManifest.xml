@@ -7,10 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -33,13 +29,13 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity
-            android:name=".module.contact.ContactActivity"
-            android:label="@string/module_contact_title"
+            android:name=".module.chat.ChatActivity"
+            android:label="@string/room_title"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity
-            android:name=".module.contact.ChatActivity"
-            android:label="@string/room_title"
+            android:name=".module.contact.ContactActivity"
+            android:label="@string/module_contact_title"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity

@@ -1,4 +1,4 @@
-package com.iems5722.group1.pharos.module.contact;
+package com.iems5722.group1.pharos.module.chat;
 
 import android.os.AsyncTask;
 import android.util.Log;

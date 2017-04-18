@@ -4,10 +4,8 @@ package com.iems5722.group1.pharos.service;
  * Created by Sora on 18/3/17.
  */
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -18,10 +16,7 @@ import android.util.Log;
 import com.google.firebase.messaging.RemoteMessage;
 import com.iems5722.group1.pharos.MainActivity;
 import com.iems5722.group1.pharos.R;
-import com.iems5722.group1.pharos.module.contact.ChatActivity;
-import com.iems5722.group1.pharos.utils.Util;
-
-import java.util.List;
+import com.iems5722.group1.pharos.module.chat.ChatActivity;
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 

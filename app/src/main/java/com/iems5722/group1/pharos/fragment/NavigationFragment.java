@@ -17,10 +17,8 @@ import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.HomeFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.ForumFragment;
-import com.iems5722.group1.pharos.fragment.subfragment.LocationFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.location.LocationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.person.PersonFragment;
-
-import static android.content.Intent.getIntent;
 
 public class NavigationFragment extends Fragment implements BottomNavigationBar.OnTabSelectedListener {
 
