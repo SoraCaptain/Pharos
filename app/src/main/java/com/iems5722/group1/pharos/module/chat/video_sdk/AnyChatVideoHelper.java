@@ -1,8 +1,6 @@
 package com.iems5722.group1.pharos.module.chat.video_sdk;
 
 
-
-import java.nio.ByteBuffer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +10,8 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
+
+import java.nio.ByteBuffer;
 
 
 //AnyChat 视频显示包装类，实现Java层面的视频播放
@@ -98,7 +98,6 @@ public class AnyChatVideoHelper {
 }
 
 
-
 class VideoRenderer implements Callback {
     // the bitmap used for drawing.
     private Bitmap bitmap = null;
@@ -144,7 +143,7 @@ class VideoRenderer implements Callback {
     
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+							   int height) {
 		changeDestRect(width, height);
 	}
 

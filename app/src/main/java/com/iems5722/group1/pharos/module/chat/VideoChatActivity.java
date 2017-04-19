@@ -15,6 +15,8 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.chat.config.ConfigEntity;
+import com.iems5722.group1.pharos.module.chat.config.ConfigService;
 import com.iems5722.group1.pharos.module.chat.video_sdk.AnyChatBaseEvent;
 import com.iems5722.group1.pharos.module.chat.video_sdk.AnyChatCoreSDK;
 import com.iems5722.group1.pharos.module.chat.video_sdk.AnyChatDefine;
@@ -45,7 +47,7 @@ public class VideoChatActivity extends Activity implements AnyChatBaseEvent
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_chat);
+        setContentView(R.layout.module_chat_video);
         remoteSurfaceView = (SurfaceView) findViewById(R.id.surface_remote);
         localSurfaceView = (SurfaceView) findViewById(R.id.surface_local);
         configEntity = ConfigService.LoadConfig(this);//加载视频通话设置
@@ -68,7 +70,7 @@ public class VideoChatActivity extends Activity implements AnyChatBaseEvent
     // 初始化SDK 连接服务器
     private void loginSystem(){
         if (anychat == null){
-            anychat = new AnyChatCoreSDK();
+            anychat = AnyChatCoreSDK.getInstance(VideoChatActivity.this);
             anychat.SetBaseEvent(this);         // 设置基本事件回调函数
             if (configEntity.useARMv6Lib != 0)  // 使用ARMv6指令集
                 anychat.SetSDKOptionInt(AnyChatDefine.
@@ -214,12 +216,12 @@ public class VideoChatActivity extends Activity implements AnyChatBaseEvent
         // 视频旋转模式设置
         anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_ROTATECTRL,configEntity.videorotatemode);
         // 视频平滑播放模式设置
-        anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_STREAM_SMOOTHPLAYMODE,configEntity.smoothPlayMode);
+      //  anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_STREAM_SMOOTHPLAYMODE,configEntity.smoothPlayMode);
         // 视频采集驱动设置
-        anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_CAPDRIVER,configEntity.videoCapDriver);
+      //  anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_CAPDRIVER,configEntity.videoCapDriver);
         // 本地视频采集偏色修正设置
         anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_FIXCOLORDEVIA,configEntity.fixcolordeviation);
         // 视频显示驱动设置
-        anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_VIDEOSHOW_DRIVERCTRL,configEntity.videoShowDriver);
+      //  anychat.SetSDKOptionInt(AnyChatDefine.BRAC_SO_VIDEOSHOW_DRIVERCTRL,configEntity.videoShowDriver);
     }
 }

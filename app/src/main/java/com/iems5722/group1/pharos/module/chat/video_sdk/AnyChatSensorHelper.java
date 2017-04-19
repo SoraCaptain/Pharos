@@ -1,21 +1,21 @@
 package com.iems5722.group1.pharos.module.chat.video_sdk;
 
 
-import java.util.Date;
-
-import android.view.OrientationEventListener;
-import android.view.Surface;
-import android.view.WindowManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.OrientationEventListener;
+import android.view.Surface;
+import android.view.WindowManager;
+
+import java.util.Date;
 
 
 // AnyChat Camera包装类，实现本地视频采集
-public class AnyChatSensorHelper implements SensorEventListener{
+public class AnyChatSensorHelper implements SensorEventListener {
 
 	private AnyChatOrientationEventListener orientationListener = null;
 	
@@ -99,12 +99,13 @@ public class AnyChatSensorHelper implements SensorEventListener{
 }
 
 
-class AnyChatOrientationEventListener extends OrientationEventListener{
-	public AnyChatOrientationEventListener(Context context, int rate) { 
+class AnyChatOrientationEventListener extends OrientationEventListener {
+	public AnyChatOrientationEventListener(Context context, int rate) {
 		super(context, rate);  
 	}
 	   
-	@Override public void onOrientationChanged(int degree) {
+	@Override
+	public void onOrientationChanged(int degree) {
 		int ANYCHAT_DEVICEORIENTATION_UNKNOW 			= 0;
 		int ANYCHAT_DEVICEORIENTATION_FACEUP			= 1;		// Device oriented flat, face up
 //		int ANYCHAT_DEVICEORIENTATION_FACEDOWN			= 2;		// Device oriented flat, face down

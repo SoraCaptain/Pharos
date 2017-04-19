@@ -1,10 +1,6 @@
 package com.iems5722.group1.pharos.module.chat.video_sdk;
 
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
@@ -14,6 +10,10 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 // AnyChat Camera包装类，实现本地视频采集
@@ -48,18 +48,18 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 				mCamera.stopPreview();// stopCamera();
 				mCamera.setPreviewCallbackWithBuffer(null);
 			}
-			CameraInfo cameraInfo = new CameraInfo();
+			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(iCurrentCameraId, cameraInfo);
             mCameraOrientation = cameraInfo.orientation;
             mCameraFacing = cameraInfo.facing;
             mDeviceOrientation = getDeviceOrientation();
             Log.i(TAG, "allocate: device orientation=" + mDeviceOrientation + ", camera orientation=" + mCameraOrientation + ", facing=" + mCameraFacing);
-            
+
             setCameraDisplayOrientation();
-            
+
 			/* Camera Service settings */
 			Camera.Parameters parameters = mCamera.getParameters();
-			
+
 			// 获取camera支持的相关参数，判断是否可以设置
 			List<Size> previewSizes = mCamera.getParameters().getSupportedPreviewSizes();
             Collections.sort(previewSizes, new CameraSizeComparator());
@@ -98,7 +98,7 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
                     parameters.setPreviewSize(s.width, s.height);
                 }
             }
-			
+
 			// 设置视频采集帧率
 			List<int[]> fpsRange = parameters.getSupportedPreviewFpsRange();
 			for(int i=0; i<fpsRange.size(); i++) {
@@ -116,9 +116,9 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 			try {
 				mCamera.setParameters(parameters);
 			} catch(Exception e){
-				
+
 			}
-			Size captureSize = mCamera.getParameters().getPreviewSize();
+			Camera.Size captureSize = mCamera.getParameters().getPreviewSize();
 			int bufSize = captureSize.width * captureSize.height * ImageFormat.getBitsPerPixel(ImageFormat.NV21) / 8;
 			for (int i = 0; i < iCaptureBuffers; i++) {
 				mCamera.addCallbackBuffer(new byte[bufSize]);
@@ -131,7 +131,7 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 						try {
 							AnyChatCoreSDK.InputVideoData(data, data.length, 0);
 						} catch(Exception e){
-				
+
 						}
 					}
 					mCamera.addCallbackBuffer(data);
@@ -153,21 +153,21 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 				mVideoPixfmt = AnyChatDefine.BRAC_PIX_FMT_RGB565;
 			else
 				Log.e(TAG, "unknow camera privew format:" + mCamera.getParameters().getPreviewFormat());
-			
-			Size previewSize = mCamera.getParameters().getPreviewSize();
+
+			Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
 			AnyChatCoreSDK.SetSDKOptionInt(AnyChatDefine.BRAC_SO_CORESDK_EXTVIDEOINPUT, 1);
-			
-			int iCurPreviewRange[] = new int[2];  
+
+			int iCurPreviewRange[] = new int[2];
 			parameters.getPreviewFpsRange(iCurPreviewRange);
 			AnyChatCoreSDK.SetInputVideoFormat(mVideoPixfmt, previewSize.width, previewSize.height, iCurPreviewRange[1]/1000, 0);
 			AnyChatCoreSDK.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_CAMERAFACE, cameraInfo.facing);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 
     class CameraSizeComparator implements Comparator<Size> {
-        public int compare(Size lhs, Size rhs) {
+        public int compare(Camera.Size lhs, Camera.Size rhs) {
             if(lhs.width == rhs.width){
                 if(lhs.height == rhs.height){
                     return 0;
@@ -190,7 +190,7 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 		if(bNeedCapture && mVideoPixfmt != -1)
 		{
 			try {
-				Size previewSize = mCamera.getParameters().getPreviewSize();
+				Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
 				AnyChatCoreSDK.SetSDKOptionInt(AnyChatDefine.BRAC_SO_CORESDK_EXTVIDEOINPUT, 1);
 				AnyChatCoreSDK.SetInputVideoFormat(mVideoPixfmt, previewSize.width, previewSize.height, mCamera.getParameters().getPreviewFrameRate(), 0);
 				AnyChatCoreSDK.SetSDKOptionInt(AnyChatDefine.BRAC_SO_LOCALVIDEO_CAMERAFACE, mCameraFacing);
@@ -201,17 +201,17 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 			AnyChatCoreSDK.SetSDKOptionInt(AnyChatDefine.BRAC_SO_CORESDK_EXTVIDEOINPUT, 0);
 		}
 	}
-	
+
 	// 关闭摄像头
 	public void CloseCamera() {
 		try {
 			if(null != mCamera)	{
-				mCamera.stopPreview(); 
+				mCamera.stopPreview();
 				mCamera.setPreviewCallbackWithBuffer(null);
-				bIfPreview = false; 
+				bIfPreview = false;
 				mVideoPixfmt = -1;
 				mCamera.release();
-				mCamera = null;     
+				mCamera = null;
 			}
 		} catch (Exception ex) {
 
@@ -230,13 +230,13 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 	public void CameraAutoFocus() {
 		if(mCamera == null || !bIfPreview)
 			return;
-		try {		
+		try {
 			mCamera.autoFocus(null);
 		} catch (Exception ex) {
 
 		}
 	}
-	
+
 	// 切换摄像头
 	public void SwitchCamera() {
 		try {
@@ -244,12 +244,12 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 				return;
 			iCurrentCameraId = (iCurrentCameraId==0) ? 1 : 0;
 			if(null != mCamera)	{
-				mCamera.stopPreview(); 
+				mCamera.stopPreview();
 				mCamera.setPreviewCallbackWithBuffer(null);
-				bIfPreview = false; 
+				bIfPreview = false;
 				mVideoPixfmt = -1;
 				mCamera.release();
-				mCamera = null;     
+				mCamera = null;
 			}
 
 			mCamera = Camera.open(iCurrentCameraId);
@@ -258,15 +258,15 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 		} catch (Exception ex) {
 			if(null != mCamera) {
 				mCamera.release();
-				mCamera = null; 
+				mCamera = null;
 				mVideoPixfmt = -1;
 			}
 		}
 	}
-	
+
 	// 根据摄像头的方向选择摄像头（前置、后置）
 	public void SelectVideoCapture(int facing) {
-		for (int i = 0; i < Camera.getNumberOfCameras(); i++) 
+		for (int i = 0; i < Camera.getNumberOfCameras(); i++)
 		{
 			CameraInfo info = new CameraInfo();
 			Camera.getCameraInfo(i, info);
@@ -276,7 +276,7 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 			}
 		}
 	}
-	
+
 	// 根据摄像头的序号选择摄像头（0 - GetCameraNumber()）
 	public void SelectCamera(int iCameraId) {
 		try {
@@ -286,12 +286,12 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 				return;
 			iCurrentCameraId = iCameraId;
 			if(null != mCamera)	{
-				mCamera.stopPreview(); 
+				mCamera.stopPreview();
 				mCamera.setPreviewCallbackWithBuffer(null);
-				bIfPreview = false; 
+				bIfPreview = false;
 				mVideoPixfmt = -1;
 				mCamera.release();
-				mCamera = null;     
+				mCamera = null;
 			}
 
 			mCamera = Camera.open(iCameraId);
@@ -300,15 +300,15 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 		} catch (Exception ex) {
 			if(null != mCamera) {
 				mCamera.release();
-				mCamera = null; 
+				mCamera = null;
 				mVideoPixfmt = -1;
 			}
 		}
 	}
-	
+
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		
+
 	}
 
 	@Override
@@ -333,12 +333,12 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 			try {
 				mCamera.stopPreview();
 				mCamera.setPreviewCallbackWithBuffer(null);
-				bIfPreview = false; 
+				bIfPreview = false;
 				mCamera.release();
 				mCamera = null;
 			} catch (Exception ex) {
 				mCamera = null;
-				bIfPreview = false; 
+				bIfPreview = false;
 			}
 		}
 		currentHolder = null;
@@ -368,14 +368,14 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
         }
         return orientation;
     }
-	
+
 	public void setCameraDisplayOrientation () {
 		if(mContext == null)
 			return;
 		try {
-			CameraInfo cameraInfo = new CameraInfo();
+			Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
 			Camera.getCameraInfo(iCurrentCameraId, cameraInfo);
-    
+
 			WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
 			int rotation = wm.getDefaultDisplay ().getRotation ();
 			int degrees = 0 ;
@@ -387,7 +387,7 @@ public class AnyChatCameraHelper implements SurfaceHolder.Callback{
 			}
 
 			int result;
-			if ( cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT ) {
+			if ( cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT ) {
 				result = ( cameraInfo.orientation + degrees ) % 360 ;
 				result = ( 360 - result ) % 360 ;   // compensate the mirror
 			} else {   // back-facing

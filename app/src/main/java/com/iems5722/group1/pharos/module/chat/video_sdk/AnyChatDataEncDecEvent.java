@@ -1,7 +1,5 @@
 package com.iems5722.group1.pharos.module.chat.video_sdk;
 
-import com.bairuitech.anychat.AnyChatOutParam;
-
 // 数据加密、解密接口
 public interface AnyChatDataEncDecEvent {
 

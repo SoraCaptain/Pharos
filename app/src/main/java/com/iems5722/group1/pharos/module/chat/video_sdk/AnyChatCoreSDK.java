@@ -1,14 +1,13 @@
 package com.iems5722.group1.pharos.module.chat.video_sdk;		// 不能修改包的名称
 
-import java.lang.ref.WeakReference;
-
-import android.util.Log;
-import android.view.Surface;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Surface;
+
+import java.lang.ref.WeakReference;
 
 
 public class AnyChatCoreSDK
@@ -52,7 +51,7 @@ public class AnyChatCoreSDK
 		return mAnyChat;
 	}
 	
-	private AnyChatCoreSDK() {
+	public AnyChatCoreSDK() {
 		
 	}
 	
@@ -273,7 +272,7 @@ public class AnyChatCoreSDK
 	// 选择指定的音频播放设备
 	public native int SelectAudioPlayback(String devicename);
 	// 获取当前使用的音频播放设备
-	public native String GetCurAudioPlayback();	
+	public native String GetCurAudioPlayback();
 	
 	// 更改当前的聊天模式
 	public native int ChangeChatMode(int chatmode);
