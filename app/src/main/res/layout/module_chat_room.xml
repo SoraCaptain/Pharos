@@ -35,7 +35,12 @@
             android:layout_above="@+id/edit_message"
 
             />
-
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnVideo"
+                android:layout_alignParentBottom="true"
+                android:text="video"/>
             <EditText
                 android:id="@+id/edit_message"
                 android:layout_width="wrap_content"
@@ -43,6 +48,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_alignParentBottom="true"
                 android:layout_toStartOf="@+id/button_send"
+                android:layout_toEndOf="@id/btnVideo"
                 android:layout_alignParentStart="true"
                 android:hint="@string/edit_message"
                 />

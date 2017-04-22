@@ -29,4 +29,5 @@
     <string name="module_notification">notification</string>
     <string name="action_plus">plus</string>
     <string name="title_activity_location_fragment">Map</string>
+    <string name="module_locationDetail">Detail</string>
 </resources>

@@ -51,7 +51,7 @@ public class AnyChatCoreSDK
 		return mAnyChat;
 	}
 	
-	public AnyChatCoreSDK() {
+	private AnyChatCoreSDK() {
 		
 	}
 	

@@ -43,6 +43,8 @@ public class VideoChatActivity extends Activity implements AnyChatBaseEvent
     private Handler handler;                    // 用Handler来不间断刷新即时视频
     private List<String> userlist = new ArrayList<String>();//保存在线用户列表
     private int userid;                         // 用户ID
+
+    private boolean bNeedRelease = false;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -69,15 +71,22 @@ public class VideoChatActivity extends Activity implements AnyChatBaseEvent
     }
     // 初始化SDK 连接服务器
     private void loginSystem(){
-        if (anychat == null){
+//        if (anychat == null){
+//            anychat = AnyChatCoreSDK.getInstance(VideoChatActivity.this);
+//            anychat.SetBaseEvent(this);         // 设置基本事件回调函数
+//            if (configEntity.useARMv6Lib != 0)  // 使用ARMv6指令集
+//                anychat.SetSDKOptionInt(AnyChatDefine.
+//                        BRAC_SO_CORESDK_USEARMV6LIB, 1);
+//            anychat.InitSDK(android.os.Build.VERSION.SDK_INT, 0); // 初始化SDK
+//        }
+//        anychat.Connect("demo.anychat.cn", 8906);// 连接服务器
+
+        if (anychat == null) {
             anychat = AnyChatCoreSDK.getInstance(VideoChatActivity.this);
-            anychat.SetBaseEvent(this);         // 设置基本事件回调函数
-            if (configEntity.useARMv6Lib != 0)  // 使用ARMv6指令集
-                anychat.SetSDKOptionInt(AnyChatDefine.
-                        BRAC_SO_CORESDK_USEARMV6LIB, 1);
-            anychat.InitSDK(android.os.Build.VERSION.SDK_INT, 0); // 初始化SDK
+            anychat.SetBaseEvent(this);
+            anychat.InitSDK(android.os.Build.VERSION.SDK_INT, 0);
+            bNeedRelease = true;
         }
-        anychat.Connect("demo.anychat.cn", 8906);// 连接服务器
     }
     // 显示即时视频通话画面
     public void VideoChat(){

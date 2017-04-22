@@ -3,6 +3,7 @@ package com.iems5722.group1.pharos.module.chat;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -41,6 +44,7 @@ import java.util.List;
  **/
 
 public class ChatActivity extends AppCompatActivity {
+    Button btnVideo;
     EditText edt_input;
     ListView listView;
     LvAdapter_Msg adapter;
@@ -71,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
         friendName = getIntent().getStringExtra("friend_name");
         getSupportActionBar().setTitle(friendName);
 
+        btnVideo = (Button)findViewById(R.id.btnVideo);
         edt_input = (EditText)findViewById(R.id.edit_message);
 
         listView = (ListView)findViewById(R.id.lv);
@@ -79,6 +84,15 @@ public class ChatActivity extends AppCompatActivity {
 
         TaskGetChatroomId taskGetChatroomId = new TaskGetChatroomId(friendId);
         taskGetChatroomId.execute();
+
+        btnVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(ChatActivity.this, VideoChatActivity.class);
+                startActivity(intent);
+            }
+        });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
