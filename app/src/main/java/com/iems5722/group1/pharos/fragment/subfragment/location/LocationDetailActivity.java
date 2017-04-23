@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,8 @@ import com.google.android.gms.location.places.Place;
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.fragment.subfragment.person.Entity_Person_List;
+import com.iems5722.group1.pharos.fragment.subfragment.person.LvAdapter_List;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -51,9 +55,22 @@ public class LocationDetailActivity extends AppCompatActivity {
     String Address;
     String OpenNow;
 
+    boolean isFav;
+    String userName;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_maps_detail);
+
+        ivPic = (ImageView) findViewById(R.id.ivPic);
+        btnFav = (ImageButton) findViewById(R.id.ibFav);
+        tvName = (TextView) findViewById(R.id.tvName);
+        tvPhoneNum = (TextView) findViewById(R.id.tvPhoneNum);
+        tvBusHour = (TextView) findViewById(R.id.tvBusHour);
+        tvContact = (TextView) findViewById(R.id.tvContact);
+        tvAddress = (TextView) findViewById(R.id.tvAdd);
+        tvOpenNow = (TextView) findViewById(R.id.tvOpenNow);
+
+        btnFav.setClickable(true);
         PlaceId = getIntent().getStringExtra("PlaceId");
         if (PlaceId != null) {
             new poiAsyncExtue(PlaceId).execute();
@@ -65,29 +82,32 @@ public class LocationDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ivPic = (ImageView) findViewById(R.id.ivPic);
-        btnFav = (ImageButton) findViewById(R.id.ibFav);
-        tvName = (TextView) findViewById(R.id.tvName);
-        tvPhoneNum = (TextView) findViewById(R.id.tvPhoneNum);
-        tvBusHour = (TextView) findViewById(R.id.tvBusHour);
-        tvContact = (TextView) findViewById(R.id.tvContact);
-        tvAddress = (TextView) findViewById(R.id.tvAdd);
-        tvOpenNow = (TextView) findViewById(R.id.tvOpenNow);
 
 
+        isFav = false;
 
-        String userName = Util.getUsername(this);
-        if (!userName.equals("null")) {
-
-        }
-
+        userName = Util.getUsername(this);
+        Log.e("username",userName);
         btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.e("click","ok");
+                if(isFav){
+                    isFav=false;
+                    Log.e("click","isFav");
+                    btnFav.setImageResource(R.drawable.ic_action_fav);
+                    Log.e("placeid",PlaceId);
+                    new TaskDelFav(userName,PlaceId).execute();
+                }
+                else{
+                    isFav=true;
+                    Log.e("click","isnotFav");
+                    Log.e("placeid",PlaceId);
+                    btnFav.setImageResource(R.drawable.ic_action_faved);
+                    new TaskSetFav(userName,PlaceId).execute();
+                }
             }
         });
-
     }
 
     @Override
@@ -96,8 +116,18 @@ public class LocationDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.action_share:
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_place, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private class poiAsyncExtue extends AsyncTask<String, Void, Location_Entity> {
@@ -200,14 +230,210 @@ public class LocationDetailActivity extends AppCompatActivity {
                 OpenNow = "Closed Now";
             }
             tvName.setText(Name);
-            tvPhoneNum.setText(PhoneNum);
-            tvBusHour.setText(BusHour);
-            tvAddress.setText(Address);
+            tvPhoneNum.setText("Phone: "+PhoneNum);
+            tvBusHour.setText("business time" + BusHour);
+            tvAddress.setText("Address: "+Address);
             tvOpenNow.setText(OpenNow);
+            if (userName.equals("null")) {
+                btnFav.setClickable(false);
+            }
+            else{
+                btnFav.setClickable(true);
+                Log.e("checkFav",String.valueOf(PlaceId)+" "+Name);
+                TaskGetCheckFav taskGetCheckFav = new TaskGetCheckFav(userName,PlaceId,Name);
+                taskGetCheckFav.execute();
+            }
             //ivPic.setImageBitmap(getURLimage());
 
         }
     }
+
+    class TaskGetCheckFav extends AsyncTask<String, Integer, String> {
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/checkFav";
+        String result = "";
+        public TaskGetCheckFav(String name,String place_id,String place_name) {
+            place_name = place_name.replace(" ","%20");
+            Log.e("checkFav",place_name);
+            this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id+"&place_name="+place_name;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if(result.equals("1")){
+                isFav=true;
+                btnFav.setImageResource(R.drawable.ic_action_faved);
+            }
+        }
+
+        public String getJsonData(String jsonUrl) {
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+                //创建本地对象的集合
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                if(jsonObject.getString("status").equals("OK")){
+                    JSONArray array = jsonObject.getJSONArray("data");
+                    result = array.getString(0);
+                }
+
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+    }
+
+    class TaskSetFav extends AsyncTask<String, Integer, String> {
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/setFav";
+        String result = "";
+        public TaskSetFav(String name,String place_id) {
+            this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+        }
+
+        public String getJsonData(String jsonUrl) {
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+                //创建本地对象的集合
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                result = jsonObject.getString("status");
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+    }
+
+    class TaskDelFav extends AsyncTask<String, Integer, String> {
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/delFav";
+        String result = "";
+        public TaskDelFav(String name,String place_id) {
+            this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+        }
+
+        public String getJsonData(String jsonUrl) {
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+                //创建本地对象的集合
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                result = jsonObject.getString("status");
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+    }
+
     public Bitmap getURLimage(String url) {
         Bitmap bmp = null;
         try {

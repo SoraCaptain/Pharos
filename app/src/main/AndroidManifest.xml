@@ -35,8 +35,8 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".module.chat.VideoChatActivity"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|keyboardHidden|navigation" >
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:launchMode="singleTask">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -45,37 +45,42 @@
             android:name=".module.contact.ContactActivity"
             android:label="@string/module_contact_title"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".module.contact.ContactAddActivity"
             android:label="@string/module_contact_add_title"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".module.favorite.FavActivity"
             android:label="@string/module_fav_title"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".module.SettingsActivity"
             android:label="@string/module_settings_title"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".fragment.subfragment.person.personLogin"
             android:label="@string/module_login_title"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".fragment.subfragment.person.PersonNoticeList"
             android:label="@string/module_notification"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".fragment.subfragment.location.LocationDetailActivity"
             android:label="@string/module_locationDetail"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".fragment.subfragment.location.LocationMapsActivity"
+            android:label="@string/module_locationMaps"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>

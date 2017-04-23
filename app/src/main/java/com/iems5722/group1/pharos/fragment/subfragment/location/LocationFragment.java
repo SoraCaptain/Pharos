@@ -170,8 +170,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
 
-
-
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {
 
         private double latitude;

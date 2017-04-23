@@ -29,6 +29,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.location.LocationFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.location.LocationMapsActivity;
 import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.module.contact.ContactActivity;
 import com.iems5722.group1.pharos.module.favorite.FavActivity;
@@ -188,7 +189,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                fragobj.setArguments(bundle);
 //                mNavigationFragment.setFragment(Latitude,Longitude,true);
 
-
+                Intent intent = new Intent();
+                intent.putExtra("Latitude", Latitude);
+                intent.putExtra("Longitude", Longitude);
+                intent.setClass(this, LocationMapsActivity.class);
+                startActivity(intent);
             }
         }
     }

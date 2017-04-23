@@ -22,7 +22,11 @@
     <string name="module_settings_title">Settings</string>
 
     <string name="item_home">Home</string>
+
     <string name="item_location">Location</string>
+    <string name="menu_share">Share</string>
+    <string name="module_locationMaps">maps</string>
+
     <string name="item_forum">Forum</string>
     <string name="item_person">Me</string>
     <string name="module_login_title">Login/Register</string>
@@ -30,4 +34,5 @@
     <string name="action_plus">plus</string>
     <string name="title_activity_location_fragment">Map</string>
     <string name="module_locationDetail">Detail</string>
+    <string name="title_activity_location_maps">Map</string>
 </resources>

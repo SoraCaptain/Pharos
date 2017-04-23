@@ -300,11 +300,15 @@ public class ChatActivity extends AppCompatActivity {
         entity.setImage(bitmap);
         entity.setUserName(userName);
         entity.setTimestamp(getDate());
-        entity.setIsComMsg(true);
+        entity.setIsComMsg(false);
         entity.setMsgType("img");
         dataArrays.add(entity);
         adapter.notifyDataSetChanged();
         listView.setSelection(listView.getCount()-1);
+        String param="";
+        param = "?chatroom_id="+roomId+"&sender_name="+userName+"&receiver_name="+friendName;
+        TaskPostImg taskPostImg = new TaskPostImg(param,bitmap);
+        taskPostImg.execute();
     }
 
     private void sendMsg() {

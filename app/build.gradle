@@ -38,4 +38,5 @@ dependencies {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.+'
 }
+
 apply plugin: 'com.google.gms.google-services'

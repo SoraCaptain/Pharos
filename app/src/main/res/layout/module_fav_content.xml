@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:minWidth="50dp"
+        android:maxWidth="200dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="6dp"
+        android:gravity="start|center"
+        android:maxLines="50"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="1dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="20dp"
+        android:text="friend001"
+        />
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@drawable/ic_action_cross"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:id="@+id/ic_action_cross"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
+</RelativeLayout>

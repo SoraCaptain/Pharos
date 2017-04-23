@@ -20,6 +20,9 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             />
     </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -35,21 +38,21 @@
             android:id="@+id/tvName"
             android:layout_below="@id/ivPic"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="60dp"
             android:paddingStart="20dp"
             android:textSize="30dp"
             android:textColor="@color/black"
-            android:text="7-11"
             />
-        <ImageButton
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:scaleType="fitXY"
-            android:id="@+id/ibShare"
-            android:layout_below="@id/ivPic"
-            android:layout_marginEnd="50dp"
-            android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/ic_share"
-            android:background="@android:color/transparent"/>
+        <!--<ImageButton-->
+            <!--android:layout_width="42dp"-->
+            <!--android:layout_height="42dp"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:id="@+id/ibShare"-->
+            <!--android:layout_below="@id/ivPic"-->
+            <!--android:layout_marginEnd="50dp"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--app:srcCompat="@drawable/ic_share"-->
+            <!--android:background="@android:color/transparent"/>-->
         <ImageButton
             android:layout_width="42dp"
             android:layout_height="42dp"
@@ -57,8 +60,9 @@
             android:id="@+id/ibFav"
             android:layout_below="@id/ivPic"
             android:layout_alignParentEnd="true"
-            app:srcCompat="@drawable/ic_action_fav"
-            android:background="@android:color/transparent"/>
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ic_action_fav"
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -67,7 +71,7 @@
             android:layout_below="@id/tvName"
             android:layout_marginTop="15dp"
             android:paddingStart="20dp"
-            android:text="add: 马料水山"
+
             android:textSize="20dp"/>
 
         <TextView
@@ -77,7 +81,7 @@
             android:layout_below="@id/tvAdd"
             android:layout_marginTop="15dp"
             android:paddingStart="20dp"
-            android:text="phone No.: 12345678"
+
             android:textSize="20dp"/>
         <TextView
             android:layout_width="match_parent"
@@ -87,7 +91,7 @@
             android:layout_marginTop="20dp"
             android:paddingStart="20dp"
             android:textSize="20dp"
-            android:text="contact"/>
+            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +100,7 @@
             android:layout_marginTop="15dp"
             android:paddingStart="20dp"
             android:textSize="20dp"
-            android:text="open time: 8:00-18:00"/>
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -107,6 +111,7 @@
             android:layout_marginTop="20dp"
             android:paddingStart="20dp"
             android:textSize="20dp"
-            android:text="contact"/>
+            />
     </RelativeLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
