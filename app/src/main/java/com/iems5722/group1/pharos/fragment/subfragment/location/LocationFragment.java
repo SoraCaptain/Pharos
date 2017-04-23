@@ -24,6 +24,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,7 +53,7 @@ import java.util.List;
 import static com.iems5722.group1.pharos.R.id.map;
 
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnMapLongClickListener {
     private Button button;
     private TextView textView;
     private LocationManager locationManager;
@@ -62,10 +65,10 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     private GoogleMap mMap;
     private String formatted_address;
 
-    public static LocationFragment newInstance(String s){
+    public static LocationFragment newInstance(String s) {
         LocationFragment homeFragment = new LocationFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGS,s);
+        bundle.putString(Constants.ARGS, s);
 
         return homeFragment;
     }
@@ -73,8 +76,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
 
 
         View view = inflater.inflate(R.layout.fragment_maps, null, false);
@@ -100,10 +101,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                 Log.e("TAG", "IN ON LOCATION CHANGE");
                 if (location != null) {
                     showLocation(location);
-                    new MyAsyncExtue(latitude,longitude).execute(location);
-                }
-                else {
-                   // textView.setText("Can not obtain data");
+                    new MyAsyncExtue(latitude, longitude).execute(location);
+                } else {
+                    // textView.setText("Can not obtain data");
                 }
 //                if(location==null) {
 //                    Log.e("longitude", Double.toString(location.getLongitude()));
@@ -134,132 +134,150 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     @Override
+    public void onMapLongClick(LatLng point){
+        mMap.addMarker(new MarkerOptions().position(point).draggable(true).title("Current location: " + formatted_address));
+        Toast.makeText(getActivity(), "longpress", Toast.LENGTH_SHORT);
+    }
+
+
+    @Override
     public void onPoiClick(PointOfInterest poi) {
         Toast.makeText(getActivity(), "Clicked: " +
                         poi.name + "\nPlace ID:" + poi.placeId +
                         "\nLatitude:" + poi.latLng.latitude +
                         " Longitude:" + poi.latLng.longitude,
                 Toast.LENGTH_SHORT).show();
-        if(poi.placeId!=null) {
-            new poiAsyncExtue(poi.placeId, poi.name).execute();
-        }
+//        if(poi.placeId!=null) {
+//            new poiAsyncExtue(poi.placeId, poi.name).execute();
+//        }
+        Intent intent = new Intent();
+        intent.putExtra("PlaceId", poi.placeId);
+        intent.setClass(getActivity(), LocationDetailActivity.class);
+        startActivity(intent);
     }
 
-    private class poiAsyncExtue extends AsyncTask<String, Void, String> {
-
-        private String placeId;
-        private String name;
-        public poiAsyncExtue(String placeid, String name){
-            this.placeId=placeid;
-            this.name=name;
-        }
-        @Override
-        protected String doInBackground(String... params) {
-
-            StringBuffer sb = new StringBuffer();
-            try {
-                URL httpUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json?placeid="+ this.placeId+ "&key=AIzaSyCEJXxPebN1xP15X8ShzQMsWT0etG3fqow");
-                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
-                connection.setReadTimeout(5000);
-                connection.setRequestMethod("GET");
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String str = "";
-
-                while ((str = bufferedReader.readLine()) != null) {
-                    //Log.e("str", str);
-                    sb.append(str);
-                }
-                Log.e("location_info:", sb.toString());
-                JSONObject jsonObject = null;
-                jsonObject = new JSONObject(sb.toString());
-
-                String status = null;
-                status = jsonObject.getString("status");
-                if (status.equals("OK")) {
-                    Location_Entity location = new Location_Entity();
-                    JSONObject jsonObject1 = null;
-                    jsonObject1 = jsonObject.getJSONObject("result");
-
-                    if(!jsonObject1.isNull("formatted_address")) {
-                        Log.e("formatted_address", jsonObject1.getString("formatted_address"));
-                        location.setAddress(jsonObject1.getString("formatted_address"));
-                    }
-
-                    Log.e("name", name);
-                    location.setName(name);
-
-                    Log.e("placeId", this.placeId);
-                    location.setPlaceId(this.placeId);
-
-                    if(!jsonObject1.isNull("international_phone_number")) {
-                        Log.e("phoneNum", jsonObject1.getString("international_phone_number"));
-                        location.setPhoneNum(jsonObject1.getString("international_phone_number"));
-                    }else if (!jsonObject1.isNull("formatted_phone_number")){
-                        Log.e("phoneNum", jsonObject1.getString("formatted_phone_number"));
-                        location.setPhoneNum(jsonObject1.getString("formatted_phone_number"));
-                    }
-
-
-                    JSONObject jsonObject2= null;
-                    if(!jsonObject1.isNull("opening_hours")) {
-                        jsonObject2 = jsonObject1.getJSONObject("opening_hours");
-
-                        if (!jsonObject2.isNull("open_now")) {
-                            Log.e("openNow:", String.valueOf(jsonObject2.getBoolean("open_now")));
-                            location.setOpennow(jsonObject2.getBoolean("open_now"));
-                        }
-
-                        //Log.e("busHour", jsonObject1.getJSONArray("opening_hours"));
-                        JSONArray jsonArray2 = jsonObject2.getJSONArray("weekday_text");
-                        String opening_hours = "";
-                        for (int i = 0; i < 7; i++) {
-                            Log.e("weekday_text", jsonArray2.getString(i));
-                            if (!jsonArray2.getString(i).isEmpty()) {
-                                opening_hours = opening_hours + '\n' + jsonArray2.getString(i);
-                            }
-                        }
-                        Log.e("busHour:", opening_hours);
-                        location.setBusHour(opening_hours);
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "hello";
-        }
-
-        @Override
-        protected void onPostExecute(String m_list) {
-            super.onPostExecute(m_list);
-
+//    private class poiAsyncExtue extends AsyncTask<String, Void, Location_Entity> {
+//
+//        private String placeId;
+//        private String name;
+//        public poiAsyncExtue(String placeid, String name){
+//            this.placeId=placeid;
+//            this.name=name;
+//        }
+//        @Override
+//        protected Location_Entity doInBackground(String... params) {
+//
+//            StringBuffer sb = new StringBuffer();
+//            Location_Entity location = new Location_Entity();
+//            try {
+//
+//                URL httpUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json?placeid="+ this.placeId+ "&key=AIzaSyCEJXxPebN1xP15X8ShzQMsWT0etG3fqow");
+//                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+//                connection.setReadTimeout(5000);
+//                connection.setRequestMethod("GET");
+//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                String str = "";
+//
+//                while ((str = bufferedReader.readLine()) != null) {
+//                    //Log.e("str", str);
+//                    sb.append(str);
+//                }
+//                Log.e("location_info:", sb.toString());
+//                JSONObject jsonObject = null;
+//                jsonObject = new JSONObject(sb.toString());
+//
+//                String status = null;
+//                status = jsonObject.getString("status");
+//                if (status.equals("OK")) {
+//                    JSONObject jsonObject1 = null;
+//                    jsonObject1 = jsonObject.getJSONObject("result");
+//
+//                    if(!jsonObject1.isNull("formatted_address")) {
+//                        Log.e("formatted_address", jsonObject1.getString("formatted_address"));
+//                        location.setAddress(jsonObject1.getString("formatted_address"));
+//                    }
+//
+//                    Log.e("name", name);
+//                    location.setName(name);
+//
+//                    Log.e("placeId", this.placeId);
+//                    location.setPlaceId(this.placeId);
+//
+//                    if(!jsonObject1.isNull("international_phone_number")) {
+//                        Log.e("phoneNum", jsonObject1.getString("international_phone_number"));
+//                        location.setPhoneNum(jsonObject1.getString("international_phone_number"));
+//                    }else if (!jsonObject1.isNull("formatted_phone_number")){
+//                        Log.e("phoneNum", jsonObject1.getString("formatted_phone_number"));
+//                        location.setPhoneNum(jsonObject1.getString("formatted_phone_number"));
+//                    }
+//
+//
+//                    JSONObject jsonObject2= null;
+//                    if(!jsonObject1.isNull("opening_hours")) {
+//                        jsonObject2 = jsonObject1.getJSONObject("opening_hours");
+//
+//                        if (!jsonObject2.isNull("open_now")) {
+//                            Log.e("openNow:", String.valueOf(jsonObject2.getBoolean("open_now")));
+//                            location.setOpennow(jsonObject2.getBoolean("open_now"));
+//                        }
+//
+//                        //Log.e("busHour", jsonObject1.getJSONArray("opening_hours"));
+//                        JSONArray jsonArray2 = jsonObject2.getJSONArray("weekday_text");
+//                        String opening_hours = "";
+//                        for (int i = 0; i < 7; i++) {
+//                            Log.e("weekday_text", jsonArray2.getString(i));
+//                            if (!jsonArray2.getString(i).isEmpty()) {
+//                                opening_hours = opening_hours + '\n' + jsonArray2.getString(i);
+//                            }
+//                        }
+//                        Log.e("busHour:", opening_hours);
+//                        location.setBusHour(opening_hours);
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return location;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Location_Entity location) {
+//            super.onPostExecute(location);
+//
+//
 //            Intent intent = new Intent();
-//            intent.putExtra("longitude", longitude);
-//            intent.putExtra("latitude", latitude);
-//            intent.putExtra("formatted_address", location_list.get(0).getAddress());
-//            intent.setClass(MainActivity.this, MapsActivity.class);
+//            intent.putExtra("PlaceId", location.getplaceId());
+//            intent.putExtra("Address", location.getAddress());
+//            intent.putExtra("Name", location.getName());
+//            intent.putExtra("PhoneNum",location.getPhoneNum());
+//            intent.putExtra("BusHour",location.getBusHour());
+//            intent.putExtra("OpenNow",location.getOpennow());
+//            intent.setClass(getActivity(), LocationDetailActivity.class);
 //            startActivity(intent);
-
-
-
-//            String city = "";
-////                if (m_list != null && m_list.size() > 0) {
-////                    city = m_list.get(0).getLocality();//获取城市
-////                }
-//            city = m_list;
-//            show_GPS.setText("城市:" + city);
-        }
-    }
+//
+//
+//
+////            String city = "";
+//////                if (m_list != null && m_list.size() > 0) {
+//////                    city = m_list.get(0).getLocality();//获取城市
+//////                }
+////            city = m_list;
+////            show_GPS.setText("城市:" + city);
+//        }
+//    }
 
 
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {
 
         private double latitude;
         private double longitude;
-        public MyAsyncExtue(double latitude, double longitude){
-            this.latitude=latitude;
-            this.longitude=longitude;
+
+        public MyAsyncExtue(double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
+
         @Override
         protected List<Location_Entity> doInBackground(Location... params) {
 
@@ -267,7 +285,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
             try {
                 String str_la = String.valueOf(latitude);
                 String str_lo = String.valueOf(longitude);
-                URL httpUrl = new URL("https://maps.google.com/maps/api/geocode/json?latlng="+ str_la + "," + str_lo +"&key=AIzaSyC81MNlU9zbqBVYAWGxapY6XstRSfFh92I");
+                URL httpUrl = new URL("https://maps.google.com/maps/api/geocode/json?latlng=" + str_la + "," + str_lo + "&key=AIzaSyC81MNlU9zbqBVYAWGxapY6XstRSfFh92I");
                 HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
                 connection.setReadTimeout(5000);
 
@@ -326,7 +344,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
 //            startActivity(intent);
 
 
-
 //            String city = "";
 ////                if (m_list != null && m_list.size() > 0) {
 ////                    city = m_list.get(0).getLocality();//获取城市
@@ -362,29 +379,30 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         }
 
 
-
         // this code won'textView execute IF permissions are not allowed, because in the line above there is return statement.
 
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
-                            , 10);
-                }
-                return;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}
+                        , 10);
             }
-            if (netWorkIsOpen()) {
-                //noinspection MissingPermission
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 500, listener);
-            }
-            if (gpsIsOpen()) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 500, listener);
-            }
+            return;
+        }
+
+
+
+        if (netWorkIsOpen()) {
+            //noinspection MissingPermission
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 500, listener);
+        }
+        if (gpsIsOpen()) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 500, listener);
+        }
 
 //                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
-
 
 
     }
@@ -401,6 +419,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         //String message="经度为:"+longitude+"\n"+"纬度为:"+latitude;
         //textView.setText(message);
     }
+
     private boolean gpsIsOpen() {
         boolean isOpen = true;
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//没有开启GPS
@@ -416,22 +435,34 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
         }
         return netIsOpen;
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setOnPoiClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
         mMap = googleMap;
-
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         // Add a marker in Sydney and move the camera
-        LatLng current_location = new LatLng(latitude,longitude);
-        mMap.addMarker(new MarkerOptions().position(current_location).draggable(true).title("Current location: "+ formatted_address));
+        LatLng current_location = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(current_location).draggable(true).title("Current location: " + formatted_address));
         CameraPosition.Builder cameraPosition = new CameraPosition.Builder();
         cameraPosition.target(current_location);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_location));
-        mMap.setMinZoomPreference(15.0f);
+        mMap.setMinZoomPreference(16.0f);
         mMap.setMaxZoomPreference(20.0f);
-        googleMap.setPadding(0, 0, 0, 125);//padding
+        googleMap.setPadding(0, 300, 0, 125);//padding
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setMyLocationButtonEnabled(true);
         uiSettings.setCompassEnabled(false);
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(false);

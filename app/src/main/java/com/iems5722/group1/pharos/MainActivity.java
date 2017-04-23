@@ -20,9 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
 import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.module.contact.ContactActivity;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
     private NightModeHelper mNightModeHelper;
-
+    int PLACE_PICKER_REQUEST;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +143,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.settings:
                 Snackbar.make(mDrawerLayout, "Settings", Snackbar.LENGTH_SHORT).show();
                 return true;
+            case R.id.search:
+                PLACE_PICKER_REQUEST = 1;
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try{
+                    startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+                }catch(Exception e){
+                    Log.e("search",String.valueOf(e));
+                }
             case R.id.share:
+
                 mNightModeHelper.toggle();
 //                Configuration newConfig = new Configuration(getResources().getConfiguration());
 //                newConfig.uiMode &= ~Configuration.UI_MODE_NIGHT_MASK;
@@ -152,6 +164,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("search requestCode",String.valueOf(requestCode));
+        Log.e("search resultCode",String.valueOf(resultCode));
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     public boolean isGooglePlayServicesAvailable(Activity activity) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();

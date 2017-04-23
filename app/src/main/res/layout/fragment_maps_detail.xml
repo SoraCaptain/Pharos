@@ -82,12 +82,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tvBusHour"
+            android:id="@+id/tvOpenNow"
             android:layout_below="@id/tvPhoneNum"
+            android:layout_marginTop="20dp"
+            android:paddingStart="20dp"
+            android:textSize="20dp"
+            android:text="contact"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvBusHour"
+            android:layout_below="@id/tvOpenNow"
             android:layout_marginTop="15dp"
             android:paddingStart="20dp"
             android:textSize="20dp"
             android:text="open time: 8:00-18:00"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
