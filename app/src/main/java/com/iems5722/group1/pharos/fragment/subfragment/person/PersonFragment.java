@@ -121,7 +121,7 @@ public class PersonFragment extends Fragment{
 
     class TaskGetNotice extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getNoticeNum";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getNoticeNum";
         String result = "";
         public TaskGetNotice(String name) {
             this.jsonUrl = this.jsonUrl + "?receiver_name="+name;
@@ -188,7 +188,7 @@ public class PersonFragment extends Fragment{
     class TaskDeleteToken extends AsyncTask<String, Integer, String> {
 
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/deleteToken";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/deleteToken";
 
         public TaskDeleteToken(String username) {
             Log.e("username ",username);

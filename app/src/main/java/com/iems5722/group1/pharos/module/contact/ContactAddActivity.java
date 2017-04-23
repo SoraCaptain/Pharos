@@ -73,7 +73,7 @@ public class ContactAddActivity extends AppCompatActivity {
 
     class TaskSearch extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/searchUser";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/searchUser";
         String result = "";
         String name="";
         public TaskSearch(String searchName,String ownerName) {

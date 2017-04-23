@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iems5722.group1.pharos.R;
@@ -39,39 +40,50 @@ public class LvAdapter_Msg extends BaseAdapter {
 
     public int getItemViewType(int position) {
         Entity_Get_Msg entity = this.content.get(position);
-        return entity.getMsgType()?0:1;
+        return entity.getIsComMsg()?0:1;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         Entity_Get_Msg entity = this.content.get(position);
         ViewHolder viewHolder;
-        boolean isComMsg = entity.getMsgType();
+        boolean isComMsg = entity.getIsComMsg();
 //        Log.e("adapter name",entity.getName());
 //        Log.e("adapter message",entity.getMessage());
 //        Log.e("adapter time",entity.getTimestamp());
 //        Log.e("ComMsg",String.valueOf(isComMsg));
 
-       // if(convertView == null) {
-            viewHolder = new ViewHolder();
-            if(isComMsg) {
+
+        viewHolder = new ViewHolder();
+        if(entity.getMsgType().equals("text")) {
+            if (isComMsg) {
                 convertView = this.mInflater.inflate(R.layout.module_chat_content_left, null);
             } else {
                 convertView = this.mInflater.inflate(R.layout.module_chat_content_right, null);
             }
-            TextView txt_content = (TextView)convertView.findViewById(R.id.txt_content);
-            TextView txt_time = (TextView)convertView.findViewById(R.id.txt_time);
-            TextView txt_userName = (TextView)convertView.findViewById(R.id.txt_userName);
-            viewHolder.tvUserName = txt_userName;
-            viewHolder.tvContent = txt_content;
-            viewHolder.tvSendTime = txt_time;
             convertView.setTag(viewHolder);
-//        }
-//        else {
-//            viewHolder = (LvAdapter_Msg.ViewHolder)convertView.getTag();
-//        }
+            TextView txt_content = (TextView)convertView.findViewById(R.id.txt_content);
+            viewHolder.tvContent = txt_content;
+            viewHolder.tvContent.setText(entity.getMessage());
+        }
+        else if (entity.getMsgType().equals("img")){
+            if (isComMsg){
+                convertView = this.mInflater.inflate(R.layout.module_chat_content_img_left,null);
+            }
+            else{
+                convertView = this.mInflater.inflate(R.layout.module_chat_content_img_right,null);
+            }
+            convertView.setTag(viewHolder);
+            ImageView ivImg = (ImageView)convertView.findViewById(R.id.ivImg);
+            viewHolder.ivImg = ivImg;
+            viewHolder.ivImg.setImageBitmap(entity.getImage());
+        }
+
+        TextView txt_time = (TextView)convertView.findViewById(R.id.txt_time);
+        viewHolder.tvUserName = (TextView)convertView.findViewById(R.id.txt_userName);
+        viewHolder.tvSendTime = txt_time;
+
         String name="User: "+entity.getUserName();
         viewHolder.tvUserName.setText(name);
-        viewHolder.tvContent.setText(entity.getMessage());
         viewHolder.tvSendTime.setText(entity.getTimestamp());
         return convertView;
     }
@@ -80,6 +92,7 @@ public class LvAdapter_Msg extends BaseAdapter {
         public TextView tvUserName;
         public TextView tvContent;
         public TextView tvSendTime;
+        public ImageView ivImg;
         ViewHolder() {}
     }
 }

@@ -13,9 +13,6 @@ import android.widget.ListView;
 
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.module.chat.ChatActivity;
-import com.iems5722.group1.pharos.module.contact.ContactActivity;
-import com.iems5722.group1.pharos.module.contact.Entity_Contact;
-import com.iems5722.group1.pharos.module.contact.LvAdapter_Contact;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -72,7 +69,7 @@ public class ChatRoomListActivity extends AppCompatActivity {
     class TaskGetRoomList extends AsyncTask<String, Integer, List<Entity_Chatroom>> {
         private List<Entity_Chatroom> roomsList;
         //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getChatroomsList";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getChatroomsList";
         private  String name;
         TaskGetRoomList(String name){
             this.name = name;
