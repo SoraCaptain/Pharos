@@ -13,9 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.iems5722.group1.pharos.MainActivity;
 import com.iems5722.group1.pharos.R;
-import com.iems5722.group1.pharos.fragment.subfragment.person.Entity_Notice_List;
 import com.iems5722.group1.pharos.module.chat.ChatActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
@@ -83,7 +81,7 @@ public class ContactActivity extends AppCompatActivity {
     class TaskGetFriendList extends AsyncTask<String, Integer, List<Entity_Contact>> {
         private List<Entity_Contact> newFriendsList;
         //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getFriendsList";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getFriendsList";
         private  String name;
         TaskGetFriendList(String name){
             this.name = name;

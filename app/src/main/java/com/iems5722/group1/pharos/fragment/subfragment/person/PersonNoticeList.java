@@ -62,7 +62,7 @@ public class PersonNoticeList extends AppCompatActivity {
     class TaskGetNoticeList extends AsyncTask<String, Integer, List<Entity_Notice_List>> {
         private List<Entity_Notice_List> newNoticeList;
         //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getNoticeList";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getNoticeList";
         private  String name;
         TaskGetNoticeList(String name){
             this.name = name;
