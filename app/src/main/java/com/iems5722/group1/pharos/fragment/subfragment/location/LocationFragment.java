@@ -32,6 +32,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 
@@ -41,6 +42,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ import java.util.List;
 import static com.iems5722.group1.pharos.R.id.map;
 
 
-public class LocationFragment extends Fragment implements OnMapReadyCallback {
+public class LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnPoiClickListener {
     private Button button;
     private TextView textView;
     private LocationManager locationManager;
@@ -130,6 +132,125 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         configure_button();
         return view;
     }
+
+    @Override
+    public void onPoiClick(PointOfInterest poi) {
+        Toast.makeText(getActivity(), "Clicked: " +
+                        poi.name + "\nPlace ID:" + poi.placeId +
+                        "\nLatitude:" + poi.latLng.latitude +
+                        " Longitude:" + poi.latLng.longitude,
+                Toast.LENGTH_SHORT).show();
+        if(poi.placeId!=null) {
+            new poiAsyncExtue(poi.placeId, poi.name).execute();
+        }
+    }
+
+    private class poiAsyncExtue extends AsyncTask<String, Void, String> {
+
+        private String placeId;
+        private String name;
+        public poiAsyncExtue(String placeid, String name){
+            this.placeId=placeid;
+            this.name=name;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+
+            StringBuffer sb = new StringBuffer();
+            try {
+                URL httpUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json?placeid="+ this.placeId+ "&key=AIzaSyCEJXxPebN1xP15X8ShzQMsWT0etG3fqow");
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String str = "";
+
+                while ((str = bufferedReader.readLine()) != null) {
+                    //Log.e("str", str);
+                    sb.append(str);
+                }
+                Log.e("location_info:", sb.toString());
+                JSONObject jsonObject = null;
+                jsonObject = new JSONObject(sb.toString());
+
+                String status = null;
+                status = jsonObject.getString("status");
+                if (status.equals("OK")) {
+                    Location_Entity location = new Location_Entity();
+                    JSONObject jsonObject1 = null;
+                    jsonObject1 = jsonObject.getJSONObject("result");
+
+                    if(!jsonObject1.isNull("formatted_address")) {
+                        Log.e("formatted_address", jsonObject1.getString("formatted_address"));
+                        location.setAddress(jsonObject1.getString("formatted_address"));
+                    }
+
+                    Log.e("name", name);
+                    location.setName(name);
+
+                    Log.e("placeId", this.placeId);
+                    location.setPlaceId(this.placeId);
+
+                    if(!jsonObject1.isNull("international_phone_number")) {
+                        Log.e("phoneNum", jsonObject1.getString("international_phone_number"));
+                        location.setPhoneNum(jsonObject1.getString("international_phone_number"));
+                    }else if (!jsonObject1.isNull("formatted_phone_number")){
+                        Log.e("phoneNum", jsonObject1.getString("formatted_phone_number"));
+                        location.setPhoneNum(jsonObject1.getString("formatted_phone_number"));
+                    }
+
+
+                    JSONObject jsonObject2= null;
+                    if(!jsonObject1.isNull("opening_hours")) {
+                        jsonObject2 = jsonObject1.getJSONObject("opening_hours");
+
+                        if (!jsonObject2.isNull("open_now")) {
+                            Log.e("openNow:", String.valueOf(jsonObject2.getBoolean("open_now")));
+                            location.setOpennow(jsonObject2.getBoolean("open_now"));
+                        }
+
+                        //Log.e("busHour", jsonObject1.getJSONArray("opening_hours"));
+                        JSONArray jsonArray2 = jsonObject2.getJSONArray("weekday_text");
+                        String opening_hours = "";
+                        for (int i = 0; i < 7; i++) {
+                            Log.e("weekday_text", jsonArray2.getString(i));
+                            if (!jsonArray2.getString(i).isEmpty()) {
+                                opening_hours = opening_hours + '\n' + jsonArray2.getString(i);
+                            }
+                        }
+                        Log.e("busHour:", opening_hours);
+                        location.setBusHour(opening_hours);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "hello";
+        }
+
+        @Override
+        protected void onPostExecute(String m_list) {
+            super.onPostExecute(m_list);
+
+//            Intent intent = new Intent();
+//            intent.putExtra("longitude", longitude);
+//            intent.putExtra("latitude", latitude);
+//            intent.putExtra("formatted_address", location_list.get(0).getAddress());
+//            intent.setClass(MainActivity.this, MapsActivity.class);
+//            startActivity(intent);
+
+
+
+//            String city = "";
+////                if (m_list != null && m_list.size() > 0) {
+////                    city = m_list.get(0).getLocality();//获取城市
+////                }
+//            city = m_list;
+//            show_GPS.setText("城市:" + city);
+        }
+    }
+
 
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {
 
@@ -297,6 +418,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setOnPoiClickListener(this);
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
@@ -307,11 +429,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_location));
         mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
-        googleMap.setPadding(0, 0, 0, 125);
+        googleMap.setPadding(0, 0, 0, 125);//padding
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setCompassEnabled(false);
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setMyLocationButtonEnabled(false);
     }
+
 }
