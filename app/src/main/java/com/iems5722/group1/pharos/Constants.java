@@ -13,6 +13,6 @@ public class Constants {
      */
     public static final String PREFS_USERNAME_SAVE = "usernameSave";
     public static final String PREFS_USERNAME_KEY = "usernameKey";
-    public static final String PREFS_ROOMSTATUS_SAVE = "chatroomSave";
-    public static final String PREFS_ROOMSTATUS_KEY = "chatroomKey";
+    public static final String PREFS_PLACE_SAVE = "placeSave";
+    public static final String PREFS_PLACE_KEY = "placeKey";
 }

@@ -42,6 +42,23 @@ public class Util {
         editor.apply();
     }
 
+    public static void setPlace(final String name,Context context) {
+        sharedPreferences= context.getSharedPreferences(Constants.PREFS_PLACE_SAVE,
+                Context.MODE_PRIVATE);
+        // Save the text in SharedPreference
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constants.PREFS_PLACE_KEY, name);
+        editor.apply();
+    }
+
+    public static String getPlace(Context context) {
+        sharedPreferences= context.getSharedPreferences(Constants.PREFS_PLACE_SAVE,
+                Context.MODE_PRIVATE);
+        if (username != null)
+            return username;
+        username = sharedPreferences.getString(Constants.PREFS_PLACE_KEY, "false");
+        return username;
+    }
 
     public static void delUserName(String name,Context context){
         sharedPreferences= context.getSharedPreferences(Constants.PREFS_USERNAME_SAVE,

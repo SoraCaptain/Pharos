@@ -62,7 +62,6 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
                 .initialise();
 
         mBottomNavigationBar.setTabSelectedListener(this);
-
         setDefaultFragment();
         return view;
     }
@@ -121,6 +120,13 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
     @Override
     public void onTabReselected(int position) {
 
+    }
+
+    public void setFragment(Double latitude,Double longitude,boolean transfer){
+        FragmentTransaction beginTransaction = getFragmentManager().beginTransaction();
+        mLocationFragment = LocationFragment.newInstance(String.valueOf(latitude)+","+String.valueOf(longitude)+","+String.valueOf(transfer));
+        beginTransaction.replace(R.id.sub_content, mLocationFragment);
+        beginTransaction.commit();
     }
 
     @Override

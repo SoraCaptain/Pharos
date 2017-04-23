@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,6 +61,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     private LocationListener listener;
     private double longitude;
     private double latitude;
+    private boolean transfer;
     private List<Location_Entity> location_list;
 
     private GoogleMap mMap;
@@ -68,8 +70,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
     public static LocationFragment newInstance(String s) {
         LocationFragment homeFragment = new LocationFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.ARGS, s);
-
+        bundle.putString("data", s);
         return homeFragment;
     }
 
@@ -79,57 +80,72 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
 
 
         View view = inflater.inflate(R.layout.fragment_maps, null, false);
-        //Bundle bundle = getArguments();
-        //String s = bundle.getString(Constants.ARGS);
+//        Bundle bundle = getArguments();
+//        String s = bundle.getString("data");
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
+//        String[] data = s.split(",");
+//        if(data.length==3 && data[2].equals("true")) {
+//
+//            latitude = getArguments().getDouble("Latitude", 0);
+//            Log.e("latitude", String.valueOf(latitude));
+//
+//            longitude = getArguments().getDouble("Longitude", 0);
+//            Log.e("longitude", String.valueOf(longitude));
+//
+//            transfer = getArguments().getBoolean("transfer", false);
+//            Log.e("transfer", String.valueOf(transfer));
+//
+//            new MyAsyncExtue(latitude, longitude).execute();
+//    }
+//        else{
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                Toast.makeText(getActivity(), "GPS available", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "GPS not available", Toast.LENGTH_SHORT).show();
+            }
 
 
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(getActivity(), "GPS available", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), "GPS not available", Toast.LENGTH_SHORT).show();
-        }
-
-
-        listener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Log.e("TAG", "IN ON LOCATION CHANGE");
-                if (location != null) {
-                    showLocation(location);
-                    new MyAsyncExtue(latitude, longitude).execute(location);
-                } else {
-                    // textView.setText("Can not obtain data");
-                }
+            listener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    Log.e("TAG", "IN ON LOCATION CHANGE");
+                    if (location != null) {
+                        showLocation(location);
+                        new MyAsyncExtue(latitude, longitude).execute(location);
+                    } else {
+                        // textView.setText("Can not obtain data");
+                    }
 //                if(location==null) {
 //                    Log.e("longitude", Double.toString(location.getLongitude()));
 //                    Log.e("latitude", Double.toString(location.getLatitude()));
 //                }
 //                textView.append("\n " + location.getLongitude() + " " + location.getLatitude());
-            }
+                }
 
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
 
-            }
+                }
 
-            @Override
-            public void onProviderEnabled(String s) {
+                @Override
+                public void onProviderEnabled(String s) {
 
-            }
+                }
 
-            @Override
-            public void onProviderDisabled(String s) {
+                @Override
+                public void onProviderDisabled(String s) {
 
-                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(i);
-            }
-        };
-        configure_button();
+                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(i);
+                }
+            };
+            configure_button();
+//        }
+
         return view;
     }
 
@@ -147,125 +163,13 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Go
                         "\nLatitude:" + poi.latLng.latitude +
                         " Longitude:" + poi.latLng.longitude,
                 Toast.LENGTH_SHORT).show();
-//        if(poi.placeId!=null) {
-//            new poiAsyncExtue(poi.placeId, poi.name).execute();
-//        }
         Intent intent = new Intent();
         intent.putExtra("PlaceId", poi.placeId);
         intent.setClass(getActivity(), LocationDetailActivity.class);
         startActivity(intent);
     }
 
-//    private class poiAsyncExtue extends AsyncTask<String, Void, Location_Entity> {
-//
-//        private String placeId;
-//        private String name;
-//        public poiAsyncExtue(String placeid, String name){
-//            this.placeId=placeid;
-//            this.name=name;
-//        }
-//        @Override
-//        protected Location_Entity doInBackground(String... params) {
-//
-//            StringBuffer sb = new StringBuffer();
-//            Location_Entity location = new Location_Entity();
-//            try {
-//
-//                URL httpUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json?placeid="+ this.placeId+ "&key=AIzaSyCEJXxPebN1xP15X8ShzQMsWT0etG3fqow");
-//                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
-//                connection.setReadTimeout(5000);
-//                connection.setRequestMethod("GET");
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//                String str = "";
-//
-//                while ((str = bufferedReader.readLine()) != null) {
-//                    //Log.e("str", str);
-//                    sb.append(str);
-//                }
-//                Log.e("location_info:", sb.toString());
-//                JSONObject jsonObject = null;
-//                jsonObject = new JSONObject(sb.toString());
-//
-//                String status = null;
-//                status = jsonObject.getString("status");
-//                if (status.equals("OK")) {
-//                    JSONObject jsonObject1 = null;
-//                    jsonObject1 = jsonObject.getJSONObject("result");
-//
-//                    if(!jsonObject1.isNull("formatted_address")) {
-//                        Log.e("formatted_address", jsonObject1.getString("formatted_address"));
-//                        location.setAddress(jsonObject1.getString("formatted_address"));
-//                    }
-//
-//                    Log.e("name", name);
-//                    location.setName(name);
-//
-//                    Log.e("placeId", this.placeId);
-//                    location.setPlaceId(this.placeId);
-//
-//                    if(!jsonObject1.isNull("international_phone_number")) {
-//                        Log.e("phoneNum", jsonObject1.getString("international_phone_number"));
-//                        location.setPhoneNum(jsonObject1.getString("international_phone_number"));
-//                    }else if (!jsonObject1.isNull("formatted_phone_number")){
-//                        Log.e("phoneNum", jsonObject1.getString("formatted_phone_number"));
-//                        location.setPhoneNum(jsonObject1.getString("formatted_phone_number"));
-//                    }
-//
-//
-//                    JSONObject jsonObject2= null;
-//                    if(!jsonObject1.isNull("opening_hours")) {
-//                        jsonObject2 = jsonObject1.getJSONObject("opening_hours");
-//
-//                        if (!jsonObject2.isNull("open_now")) {
-//                            Log.e("openNow:", String.valueOf(jsonObject2.getBoolean("open_now")));
-//                            location.setOpennow(jsonObject2.getBoolean("open_now"));
-//                        }
-//
-//                        //Log.e("busHour", jsonObject1.getJSONArray("opening_hours"));
-//                        JSONArray jsonArray2 = jsonObject2.getJSONArray("weekday_text");
-//                        String opening_hours = "";
-//                        for (int i = 0; i < 7; i++) {
-//                            Log.e("weekday_text", jsonArray2.getString(i));
-//                            if (!jsonArray2.getString(i).isEmpty()) {
-//                                opening_hours = opening_hours + '\n' + jsonArray2.getString(i);
-//                            }
-//                        }
-//                        Log.e("busHour:", opening_hours);
-//                        location.setBusHour(opening_hours);
-//                    }
-//                }
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return location;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Location_Entity location) {
-//            super.onPostExecute(location);
-//
-//
-//            Intent intent = new Intent();
-//            intent.putExtra("PlaceId", location.getplaceId());
-//            intent.putExtra("Address", location.getAddress());
-//            intent.putExtra("Name", location.getName());
-//            intent.putExtra("PhoneNum",location.getPhoneNum());
-//            intent.putExtra("BusHour",location.getBusHour());
-//            intent.putExtra("OpenNow",location.getOpennow());
-//            intent.setClass(getActivity(), LocationDetailActivity.class);
-//            startActivity(intent);
-//
-//
-//
-////            String city = "";
-//////                if (m_list != null && m_list.size() > 0) {
-//////                    city = m_list.get(0).getLocality();//获取城市
-//////                }
-////            city = m_list;
-////            show_GPS.setText("城市:" + city);
-//        }
-//    }
+
 
 
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {

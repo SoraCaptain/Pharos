@@ -2,6 +2,7 @@ package com.iems5722.group1.pharos;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.location.LocationFragment;
 import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.module.contact.ContactActivity;
 import com.iems5722.group1.pharos.module.favorite.FavActivity;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
     private NightModeHelper mNightModeHelper;
-    int PLACE_PICKER_REQUEST;
+    int PLACE_PICKER_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,13 +146,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Snackbar.make(mDrawerLayout, "Settings", Snackbar.LENGTH_SHORT).show();
                 return true;
             case R.id.search:
-                PLACE_PICKER_REQUEST = 1;
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try{
                     startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
                 }catch(Exception e){
                     Log.e("search",String.valueOf(e));
                 }
+                return true;
             case R.id.share:
 
                 mNightModeHelper.toggle();
@@ -167,11 +169,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("search requestCode",String.valueOf(requestCode));
         Log.e("search resultCode",String.valueOf(resultCode));
+        Log.e("PLACE_PICKER_REQUEST", String.valueOf(PLACE_PICKER_REQUEST));
         if (requestCode == PLACE_PICKER_REQUEST) {
+            Log.e("result_ok", String.valueOf(RESULT_OK));
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg = String.format("Place: %s", place.getName());
-                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                String PlaceID = String.format("PlaceID: %s", place.getId());
+                Double Latitude = place.getLatLng().latitude;
+                Double Longitude = place.getLatLng().longitude;
+                Toast.makeText(this, PlaceID, Toast.LENGTH_LONG).show();
+                Log.e("place",String.valueOf(Latitude)+" "+String.valueOf(Longitude));
+//                Util.setPlace("true",this);
+//                Bundle bundle = new Bundle();
+//                bundle.putDouble("Latitude", Latitude);
+//                bundle.putDouble("Longitude", Longitude);
+//                bundle.putBoolean("transfer", true);
+//                LocationFragment fragobj = new LocationFragment();
+//                fragobj.setArguments(bundle);
+//                mNavigationFragment.setFragment(Latitude,Longitude,true);
+
+
             }
         }
     }
