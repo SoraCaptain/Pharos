@@ -44,12 +44,12 @@ public class NavigationFragment extends Fragment implements BottomNavigationBar.
         View view = inflater.inflate(R.layout.fragment_bottom_navigation_bar, container, false);
         mTextView = (TextView) view.findViewById(R.id.activity_text_view);
         Bundle bundle = getArguments();
-        if (bundle != null) {
-            String s = bundle.getString(Constants.ARGS);
-            if (!TextUtils.isEmpty(s)) {
-                mTextView.setText(s);
-            }
-        }
+//        if (bundle != null) {
+//            String s = bundle.getString(Constants.ARGS);
+//            if (!TextUtils.isEmpty(s)) {
+//                mTextView.setText(s);
+//            }
+//        }
         mBottomNavigationBar = (BottomNavigationBar) view.findViewById(R.id.bottom_navigation_bar);
         mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         mBottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);

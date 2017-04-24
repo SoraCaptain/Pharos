@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
+import com.hannesdorfmann.swipeback.Position;
+import com.hannesdorfmann.swipeback.SwipeBack;
 import com.iems5722.group1.pharos.R;
 
 import org.json.JSONArray;
@@ -45,15 +48,21 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_maps);
+        SwipeBack.attach(this, Position.LEFT)
+                .setSwipeBackView(R.layout.swipeback_default);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        latitude = Double.valueOf(getIntent().getStringExtra("latitude"));
-        longitude = getIntent().getDoubleExtra("longitude",0);
+        latitude = getIntent().getDoubleExtra("Latitude",0);
+        longitude = getIntent().getDoubleExtra("Longitude",0);
         Log.e("lat",String.valueOf(latitude));
         Log.e("lon",String.valueOf(longitude));
-        //new MyAsyncExtue(latitude, longitude).execute();
+        new MyAsyncExtue(latitude, longitude).execute();
     }
 
 
@@ -116,6 +125,8 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
         intent.setClass(this, LocationDetailActivity.class);
         startActivity(intent);
     }
+
+
 
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {
 

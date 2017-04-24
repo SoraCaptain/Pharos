@@ -64,6 +64,15 @@ public class FavActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                dataArrays.remove(position);
+                adapter.notifyDataSetChanged();
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -163,4 +172,62 @@ public class FavActivity extends AppCompatActivity {
 
     }
 
+    class TaskDelFav extends AsyncTask<String, Integer, String> {
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/delFav";
+        String result = "";
+        public TaskDelFav(String name,String place_id) {
+            this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+        }
+
+        public String getJsonData(String jsonUrl) {
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+                //创建本地对象的集合
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                result = jsonObject.getString("status");
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+    }
 }
