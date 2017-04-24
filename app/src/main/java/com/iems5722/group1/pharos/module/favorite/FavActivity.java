@@ -1,8 +1,15 @@
 package com.iems5722.group1.pharos.module.favorite;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,7 +46,7 @@ public class FavActivity extends AppCompatActivity {
     private ListView listView;
     private LvAdapter_Fav adapter;
     private List<Entity_Fav> dataArrays = new ArrayList();
-    private ImageButton ibCross;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.module_fav);
@@ -66,10 +73,28 @@ public class FavActivity extends AppCompatActivity {
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                dataArrays.remove(position);
-                adapter.notifyDataSetChanged();
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                Dialog dialog = new AlertDialog.Builder(FavActivity.this).setTitle("delete")
+                    .setMessage("are you sure?")// 设置内容
+                    .setPositiveButton("delete",// 设置确定按钮
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                new TaskDelFav(Util.getUsername(FavActivity.this),dataArrays.get(position).getID()).execute();
+                                dataArrays.remove(position);
+                                adapter.notifyDataSetChanged();
 
+                            }
+                        }).setNegativeButton("cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //                                finish();
+                            }
+                        }).create();// 创建
+                // 显示对话框
+                dialog.show();
                 return false;
             }
         });
@@ -88,7 +113,7 @@ public class FavActivity extends AppCompatActivity {
     class TaskGetFavList extends AsyncTask<String, Integer, List<Entity_Fav>> {
         private List<Entity_Fav> newFavList;
         //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getFavList";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getFavList";
         private  String name;
         TaskGetFavList(String name){
             this.name = name;
@@ -174,7 +199,7 @@ public class FavActivity extends AppCompatActivity {
 
     class TaskDelFav extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/delFav";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/delFav";
         String result = "";
         public TaskDelFav(String name,String place_id) {
             this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;

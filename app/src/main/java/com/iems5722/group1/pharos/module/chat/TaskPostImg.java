@@ -46,7 +46,7 @@ public class TaskPostImg extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String... params) {
         //     String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/send_message";
-        String jsonUrl = "http://54.202.138.123:5000/pharos/api/sendImg";
+        String jsonUrl = "http://54.202.138.123:8000/pharos/api/sendImg";
         //jsonUrl = jsonUrl + parameter;
         Log.i("POST", "doInBackground(Params... params) called");
         postJsonData(jsonUrl,bitmap);

@@ -2,8 +2,8 @@
     <string name="app_name">Pharos</string>
     <string name="drawer_layout_open">Open</string>
     <string name="drawer_layout_close">Close</string>
-    <string name="blog_site">Blog:http://blog.csdn.net/student9128</string>
-    <string name="nick_name">Kevin</string>
+    <string name="blog_site">com.iems5722.group1.pharos</string>
+    <string name="nick_name">welcome</string>
     <string name="tips">Hello</string>
     <string name="navigation_chat_list">Chatroom list</string>
     <string name="navigation_contact">Contact</string>

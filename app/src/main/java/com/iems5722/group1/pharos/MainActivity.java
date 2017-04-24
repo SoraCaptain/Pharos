@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.plus.model.people.Person;
 import com.iems5722.group1.pharos.fragment.NavigationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.location.LocationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.location.LocationMapsActivity;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationFragment mNavigationFragment;
     private NightModeHelper mNightModeHelper;
     int PLACE_PICKER_REQUEST = 1;
+    private TextView tvHeadName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

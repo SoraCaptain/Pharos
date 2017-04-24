@@ -118,6 +118,7 @@ public class LocationDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_share:
 
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -250,7 +251,7 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     class TaskGetCheckFav extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/checkFav";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/checkFav";
         String result = "";
         public TaskGetCheckFav(String name,String place_id,String place_name) {
             place_name = place_name.replace(" ","%20");
@@ -318,7 +319,7 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     class TaskSetFav extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/setFav";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/setFav";
         String result = "";
         public TaskSetFav(String name,String place_id) {
             this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;
@@ -377,7 +378,7 @@ public class LocationDetailActivity extends AppCompatActivity {
 
     class TaskDelFav extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/delFav";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/delFav";
         String result = "";
         public TaskDelFav(String name,String place_id) {
             this.jsonUrl = this.jsonUrl + "?user_name="+name+"&place_id="+place_id;

@@ -119,7 +119,7 @@ public class LvAdapter_Notice_List extends BaseAdapter {
 
     class TaskProcessNotice extends AsyncTask<String, Integer, String> {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/processNotice";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/processNotice";
         String result = "";
         public TaskProcessNotice(String from_name, String to_name, String action) {
             this.jsonUrl = this.jsonUrl + "?from_name=" + from_name + "&to_name=" + to_name + "&action=" + action;
