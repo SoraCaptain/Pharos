@@ -3,6 +3,7 @@ package com.iems5722.group1.pharos.fragment.subfragment.location;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.hannesdorfmann.swipeback.Position;
@@ -23,6 +25,7 @@ import com.hannesdorfmann.swipeback.SwipeBack;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.person.Entity_Person_List;
 import com.iems5722.group1.pharos.fragment.subfragment.person.LvAdapter_List;
+import com.iems5722.group1.pharos.module.contact.Entity_Contact;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -33,6 +36,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sora on 22/4/17.
@@ -119,7 +124,14 @@ public class LocationDetailActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.action_share:
-
+                String userName = Util.getUsername(LocationDetailActivity.this);
+                if(userName.equals("null")){
+                    Toast.makeText(LocationDetailActivity.this,"please login first",Toast.LENGTH_SHORT);
+                }
+                else{
+                    TaskGetFriendList taskGetFriendList = new TaskGetFriendList(userName);
+                    taskGetFriendList.execute();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -190,9 +202,6 @@ public class LocationDetailActivity extends AppCompatActivity {
                         Log.e("lat", String.valueOf(lat));
                         Log.e("lng", String.valueOf(lng));
                     }
-
-
-
 
                     if (!jsonObject1.isNull("name")) {
                         Log.e("name", jsonObject1.getString("name"));
@@ -296,6 +305,7 @@ public class LocationDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Log.e("checkFav",result);
             if(result.equals("1")){
                 isFav=true;
                 btnFav.setImageResource(R.drawable.ic_action_faved);
@@ -327,8 +337,7 @@ public class LocationDetailActivity extends AppCompatActivity {
                 //创建本地对象的集合
                 JSONObject jsonObject = new JSONObject(sb.toString());
                 if(jsonObject.getString("status").equals("OK")){
-                    JSONArray array = jsonObject.getJSONArray("data");
-                    result = array.getString(0);
+                    result = jsonObject.getJSONArray("data").getString(0);
                 }
 
                 connection.disconnect();
@@ -474,5 +483,89 @@ public class LocationDetailActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return bmp;
+    }
+
+    class TaskGetFriendList extends AsyncTask<String, Integer,ArrayList<String>> {
+        //  private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_chatrooms";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getFriendsList";
+        private  String name;
+        TaskGetFriendList(String name){
+            this.name = name;
+            jsonUrl=jsonUrl+"?user_name="+name;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+        @Override
+        protected ArrayList<String> doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        protected void onPostExecute(ArrayList<String> result) {
+            Log.i("GET", "doPostExecute called");
+            Log.e("GET", String.valueOf(result.size()));
+            if(result.size()>0){
+                LocationShareFragment dialog = new LocationShareFragment();
+                Bundle bundle = new Bundle();
+                    bundle.putCharSequenceArray("friendList", result.toArray(new CharSequence[result.size()]));
+                    dialog.setArguments(bundle);
+                    bundle.putString("placeName", Name);
+                    bundle.putString("userName",userName);
+                    dialog.show(getSupportFragmentManager(), "LocationShareFragment");
+            }
+            else{
+                Toast.makeText(LocationDetailActivity.this,"you don't have any friend yet",Toast.LENGTH_SHORT);
+            }
+            super.onPostExecute(result);
+        }
+
+        public ArrayList<String> getJsonData(String jsonUrl) {
+            ArrayList<String> friendsList = new ArrayList<>();
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl
+                        .openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", ""+sb.toString());
+                //创建本地对象的集合
+
+                // 整体是一个jsonObject
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                if(jsonObject.getString("status").equals("OK")){
+                    // 键是jsonArray数组
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        //获取jsonArray中的每个对象
+                        JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                        //添加对象，组建集合
+                        friendsList.add(jsonObject2.getString("friend_name"));
+                    }
+                }
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return friendsList;
+        }
+
     }
 }

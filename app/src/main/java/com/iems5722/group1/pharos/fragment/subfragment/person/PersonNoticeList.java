@@ -120,10 +120,10 @@ public class PersonNoticeList extends AppCompatActivity {
                         Entity_Notice_List entity = new Entity_Notice_List();
                         //为该对象进行属性值的设置操
 
-                        entity.action = Integer.valueOf(jsonObject2.getString("action"));
-                        entity.content = jsonObject2.getString("content");
-                        entity.owner = name;
-                        entity.handleStatus = Integer.valueOf(jsonObject2.getString("handleStatus"));
+                        entity.setAction(Integer.valueOf(jsonObject2.getString("action")));
+                        entity.setContent(jsonObject2.getString("content"));
+                        entity.setOwner(name);
+                        entity.setHandleStatus(Integer.valueOf(jsonObject2.getString("handleStatus")));
                         //添加对象，组建集合
                         Log.e("get",entity.getOwner());
                         Log.e("get",entity.getContent());

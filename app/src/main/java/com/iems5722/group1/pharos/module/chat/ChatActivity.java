@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -32,7 +33,9 @@ import android.widget.Toast;
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.fragment.subfragment.location.LocationDetailActivity;
 import com.iems5722.group1.pharos.module.chatrooms.ImageTools;
+import com.iems5722.group1.pharos.module.favorite.FavActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONArray;
@@ -128,6 +131,16 @@ public class ChatActivity extends AppCompatActivity {
 
                         Toast.makeText(ChatActivity.this,"load page " + pageCur,Toast.LENGTH_SHORT).show();
                     }
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(dataArrays.get(position).getMsgType().equals("map")){
+                    String placeName = dataArrays.get(position).getMessage().split("\n")[1];
+                    new TaskGetPlaceId(placeName).execute();
                 }
             }
         });
@@ -249,6 +262,7 @@ public class ChatActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -474,7 +488,6 @@ public class ChatActivity extends AppCompatActivity {
         return false;
     }
 
-
     class TaskGetMsgL extends AsyncTask<String, Integer, List<Entity_Get_Msg>> {
         private List<Entity_Get_Msg> newMsgList;
         private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getMessages";
@@ -558,7 +571,20 @@ public class ChatActivity extends AppCompatActivity {
                         entity.message = jsonObject2.getString("message");
                         entity.user_name = jsonObject2.getString("user_name");
                         entity.timestamp = jsonObject2.getString("timestamp");
-                        entity.msgType = "text";
+                        String[] msg = entity.message.split("\n");
+                        if(msg.length>0){
+                            String[] special = msg[0].split("~");
+
+                            if(special.length==2 && special[1].equals("share place")){
+                                entity.msgType = "map";
+                            }
+                            else{
+                                entity.msgType = "text";
+                            }
+                        }
+                        else{
+                            entity.msgType = "text";
+                        }
                         //添加对象，组建集合
                         newMsgList.add(entity);
 
@@ -571,6 +597,76 @@ public class ChatActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return newMsgList;
+        }
+    }
+
+    class TaskGetPlaceId extends AsyncTask<String, Integer, String>{
+
+        // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
+        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getPlaceId";
+
+        public TaskGetPlaceId(String placeName) {
+            this.jsonUrl = this.jsonUrl + "?place_name=" + placeName;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.i("GET", "onPreExecute() called");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            Log.i("GET", "doInBackground(Params... params) called");
+            return getJsonData(jsonUrl);
+        }
+
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.i("GET","onPostExecute "+result);
+            if(!result.equals("")){
+                Intent intent = new Intent();
+                intent.putExtra("PlaceId", result);
+                intent.setClass(ChatActivity.this, LocationDetailActivity.class);
+                startActivity(intent);
+            }
+        }
+
+        public String getJsonData(String jsonUrl) {
+            String placeId="";
+            try {
+                //创建url http地址
+                URL httpUrl = new URL(jsonUrl);
+                //打开http 链接
+                HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
+                //设置参数  请求为get请求
+                connection.setReadTimeout(5000);
+                connection.setRequestMethod("GET");
+                //connection.getInputStream()得到字节输入流，InputStreamReader从字节到字符的桥梁，外加包装字符流
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                //创建字符串容器
+                StringBuffer sb = new StringBuffer();
+                String str = "";
+                //行读取
+                while ((str = bufferedReader.readLine()) != null) {
+                    // 当读取完毕，就添加到容器中
+                    sb.append(str);
+                }
+                //测试是否得到json字符串
+                Log.e("TAG", "" + sb.toString());
+
+                // 整体是一个jsonObject
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                if(jsonObject.getString("status").equals("OK")) {
+                    // 键是jsonArray数组
+                    placeId=jsonObject.getString("data");
+                }
+                connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return placeId;
         }
     }
 }

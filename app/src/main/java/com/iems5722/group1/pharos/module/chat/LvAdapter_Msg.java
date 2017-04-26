@@ -52,9 +52,8 @@ public class LvAdapter_Msg extends BaseAdapter {
 //        Log.e("adapter time",entity.getTimestamp());
 //        Log.e("ComMsg",String.valueOf(isComMsg));
 
-
         viewHolder = new ViewHolder();
-        if(entity.getMsgType().equals("text")) {
+        if(entity.getMsgType().equals("text") || entity.getMsgType().equals("map")) {
             if (isComMsg) {
                 convertView = this.mInflater.inflate(R.layout.module_chat_content_left, null);
             } else {

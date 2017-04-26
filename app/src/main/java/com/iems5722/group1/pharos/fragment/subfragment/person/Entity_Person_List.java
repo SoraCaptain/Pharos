@@ -5,8 +5,8 @@ package com.iems5722.group1.pharos.fragment.subfragment.person;
  */
 
 public class Entity_Person_List {
-    public int type;
-    public String content;
+    private int type;
+    private String content;
     public Entity_Person_List(int type, String content) {
         super();
         this.type = type;
