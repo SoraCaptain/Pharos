@@ -5,11 +5,11 @@ package com.iems5722.group1.pharos.fragment.subfragment.person;
  */
 
 public class Entity_Notice_List {
-    public int action;
-    public String owner;
-    public String content;
-    public int readStatus;
-    public int handleStatus;
+    private int action;
+    private String owner;
+    private String content;
+    private int readStatus;
+    private int handleStatus;
     public Entity_Notice_List(int action, String owner, String content, int readStatus, int handleStatus) {
         super();
         this.action = action;

@@ -189,6 +189,15 @@ public class HomeFragment extends Fragment{
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject_1 = jsonArray.getJSONObject(i);
                         Entity_Home location = new Entity_Home();
+                        String typearray= "";
+                        if(!jsonObject_1.isNull("types")){
+                            JSONArray jsonArray_2 = jsonObject_1.getJSONArray("types");
+                            for(int j = 0; j < jsonArray_2.length(); j++){
+                                typearray = typearray + jsonArray_2.get(j) + ";";
+                            }
+                            Log.e("typearray", typearray);
+                            location.setPlaceType(typearray);
+                        }
 
                         Log.e("place_id", jsonObject_1.getString("place_id"));
                         if(!jsonObject_1.isNull("photos")){
