@@ -15,6 +15,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.ForumFragment;
+import com.iems5722.group1.pharos.fragment.subfragment.home.HomeFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.location.LocationFragment;
 import com.iems5722.group1.pharos.fragment.subfragment.person.PersonFragment;
 

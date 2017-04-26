@@ -55,7 +55,7 @@ public class PersonFragment extends Fragment{
         textView = (TextView) view.findViewById(R.id.lr);
         btnExit = (Button)view.findViewById(R.id.btnExit);
         listView = (ListView)view.findViewById(R.id.lv);
-        dataArrays = new ArrayList();
+        dataArrays = new ArrayList<>();
         adapter = new LvAdapter_List(getActivity(),dataArrays);
         if(s.equals("null")){
             btnExit.setVisibility(View.INVISIBLE);

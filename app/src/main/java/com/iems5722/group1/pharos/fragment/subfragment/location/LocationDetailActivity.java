@@ -478,6 +478,7 @@ public class LocationDetailActivity extends AppCompatActivity {
             conn.connect();
             InputStream is = conn.getInputStream();//获得图片的数据流
             bmp = BitmapFactory.decodeStream(is);
+            bmp.recycle();
             is.close();
         } catch (Exception e) {
             e.printStackTrace();

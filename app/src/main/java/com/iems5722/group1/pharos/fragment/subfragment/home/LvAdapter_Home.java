@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iems5722.group1.pharos.R;
 import com.iems5722.group1.pharos.fragment.subfragment.person.Entity_Person_List;
 
@@ -27,11 +28,11 @@ public class LvAdapter_Home extends BaseAdapter {
     }
 
     public int getCount() {
-        return 1;
+        return this.content.size();
     }
 
     public Object getItem(int position) {
-        return 1;
+        return this.content.get(position);
     }
 
     public long getItemId(int position) {
@@ -47,8 +48,9 @@ public class LvAdapter_Home extends BaseAdapter {
         Entity_Home entity = this.content.get(position);
         ViewHolder viewHolder;
         viewHolder = new ViewHolder();
-        convertView = this.mInflater.inflate(R.layout.fragment_home_content, null);
-
+        if(!entity.getPlaceImgWidth().equals("0")) {
+            convertView = this.mInflater.inflate(R.layout.fragment_home_content, null);
+        }
         viewHolder.ivImg = (ImageView)convertView.findViewById(R.id.ivImg);
         viewHolder.tvName = (TextView)convertView.findViewById(R.id.tvName);
         viewHolder.tvRate = (TextView)convertView.findViewById(R.id.tvRate);
@@ -57,8 +59,14 @@ public class LvAdapter_Home extends BaseAdapter {
         viewHolder.tvName.setText(entity.getPlaceName());
         viewHolder.tvType.setText(entity.getPlaceType());
         viewHolder.tvRate.setText(entity.getPlaceRate());
-        viewHolder.ivImg.setImageBitmap(entity.getPlaceImg());
-
+        //viewHolder.ivImg.setImageBitmap(entity.getPlaceImg());
+        String url="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + entity.getPlacePhotoPre() + "&key=AIzaSyARMqBMqfTYhi6NrUuF7RmvoJ69yBTynYA";
+        Glide.with(mInflater.getContext())
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.loading_spinner)
+                .crossFade()
+                .into(viewHolder.ivImg);
         convertView.setTag(viewHolder);
 
         return convertView;

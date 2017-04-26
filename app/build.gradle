@@ -62,5 +62,12 @@ dependencies {
     compile "com.twilio:video-android:1.0.0-beta16"
     compile 'com.android.support:appcompat-v7:25.+'
 }
+repositories {
+    mavenCentral() // jcenter() works as well because it pulls from Maven Central
+}
 
+dependencies {
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.android.support:support-v4:25.3.1'
+}
 apply plugin: 'com.google.gms.google-services'
