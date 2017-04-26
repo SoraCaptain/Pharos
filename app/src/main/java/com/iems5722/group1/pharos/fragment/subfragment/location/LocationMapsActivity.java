@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.hannesdorfmann.swipeback.Position;
@@ -35,7 +36,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationMapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnMapLongClickListener {
+public class LocationMapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnPoiClickListener, GoogleMap.OnMapLongClickListener,GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
 
@@ -79,6 +80,7 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setOnPoiClickListener(this);
         googleMap.setOnMapLongClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -92,7 +94,8 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
         }
         // Add a marker in Sydney and move the camera
         LatLng current_location = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(current_location).draggable(true).title("Current location: " + formatted_address));
+        //Log.e("forfor_add", formatted_address);
+        mMap.addMarker(new MarkerOptions().position(current_location).draggable(true));
         CameraPosition.Builder cameraPosition = new CameraPosition.Builder();
         cameraPosition.target(current_location);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current_location));
@@ -103,14 +106,16 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
         uiSettings.setMyLocationButtonEnabled(true);
         uiSettings.setCompassEnabled(false);
         uiSettings.setZoomControlsEnabled(true);
-
     }
 
     @Override
     public void onMapLongClick(LatLng point){
-        mMap.addMarker(new MarkerOptions().position(point).draggable(true).title("Current location: " + formatted_address));
+
+        //mMap.addMarker(new MarkerOptions().position(point).draggable(true).title("Current location: " + formatted_address)) ;
         Toast.makeText(this, "longpress", Toast.LENGTH_SHORT);
     }
+
+
 
 
     @Override
@@ -126,6 +131,11 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
         startActivity(intent);
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.setTitle("Current Location: " + formatted_address);
+        return false;
+    }
 
 
     private class MyAsyncExtue extends AsyncTask<Location, Void, List<Location_Entity>> {
@@ -160,7 +170,7 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
                     sb.append(str);
                 }
 
-                Log.e("location_JSON:", sb.toString());
+                Log.e("location_JSON", sb.toString());
                 location_list = new ArrayList<Location_Entity>();
                 JSONObject jsonObject = null;
 
@@ -193,6 +203,7 @@ public class LocationMapsActivity extends FragmentActivity implements OnMapReady
             super.onPostExecute(m_list);
 //            Log.e("str", m_list.get(0).getAddress());
             formatted_address = location_list.get(0).getAddress();
+            Log.e("for_address", formatted_address);
         }
     }
 }

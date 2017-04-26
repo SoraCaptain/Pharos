@@ -15,8 +15,11 @@ public class Location_Entity {
     private String busHour="";
     private String placeId="";
     private boolean open_now;
+    private String photo_reference="";
+    private int height=0;
+    private int width=0;
 
-    public Location_Entity(String city, String country, String address, String name, String phoneNum, String busHour, String placeId, boolean open_now) {
+    public Location_Entity(String city, String country, String address, String name, String phoneNum, String busHour, String placeId, boolean open_now, String photo_reference, int height, int width) {
         super();
         this.city = city;
         this.country = country;
@@ -26,6 +29,9 @@ public class Location_Entity {
         this.busHour = busHour;
         this.placeId = placeId;
         this.open_now = open_now;
+        this.photo_reference = photo_reference;
+        this.height=height;
+        this.width=width;
     }
     public String getplaceId() {
         return placeId;
@@ -62,6 +68,15 @@ public class Location_Entity {
 
     public boolean getOpennow(){ return open_now; }
     public void setOpennow(boolean open_now) {this.open_now = open_now; }
+
+    public String getPhoto_reference() { return photo_reference; }
+    public void setPhoto_reference(String photo_reference) { this.photo_reference = photo_reference;}
+
+    public int getHeight() {return height;}
+    public void setHeight(int height){this.height=height;}
+
+    public int getWidth(){return width;}
+    public void setWidth(int width){this.width=width;}
 
     public Location_Entity() {
         super();
