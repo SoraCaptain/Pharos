@@ -55,6 +55,8 @@ public class LocationDetailActivity extends AppCompatActivity {
     String Address;
     String OpenNow;
 
+    double lat;
+    double lng;
     boolean isFav;
     String userName;
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,14 @@ public class LocationDetailActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void toMap(View v){
+        Intent intent = new Intent();
+        intent.putExtra("Latitude", lat);
+        intent.putExtra("Longitude", lng);
+        intent.setClass(this, LocationMapsActivity.class);
+        startActivity(intent);
+    }
+
     private class poiAsyncExtue extends AsyncTask<String, Void, Location_Entity> {
 
         private String placeId;
@@ -171,6 +181,18 @@ public class LocationDetailActivity extends AppCompatActivity {
                         Log.e("formatted_address", jsonObject1.getString("formatted_address"));
                         location.setAddress(jsonObject1.getString("formatted_address"));
                     }
+
+                    JSONObject jsonObject3 = null;
+                    if(!jsonObject1.isNull("geometry")){
+                        jsonObject3 = jsonObject1.getJSONObject("geometry").getJSONObject("location");
+                        lat = jsonObject3.getDouble("lat");
+                        lng = jsonObject3.getDouble("lng");
+                        Log.e("lat", String.valueOf(lat));
+                        Log.e("lng", String.valueOf(lng));
+                    }
+
+
+
 
                     if (!jsonObject1.isNull("name")) {
                         Log.e("name", jsonObject1.getString("name"));

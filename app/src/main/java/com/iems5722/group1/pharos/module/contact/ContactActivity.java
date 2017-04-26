@@ -49,7 +49,6 @@ public class ContactActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.putExtra("friend_id", dataArrays.get(position).getID());
                 intent.putExtra("friend_name", dataArrays.get(position).getName());
                 intent.setClass(ContactActivity.this, ChatActivity.class);
                 startActivity(intent);

@@ -74,6 +74,16 @@
 
             android:textSize="20dp"/>
 
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/map"
+            android:background="@drawable/map"
+            android:layout_below="@id/tvName"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:onClick="toMap"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

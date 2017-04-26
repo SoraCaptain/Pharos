@@ -61,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     List<Entity_Get_Msg> dataArrays = new ArrayList();
 
     String friendName;
-    String friendId;
+   // String friendId;
     String roomId;
     TaskGetMsgL getMsgL;
     String postContent = "";
@@ -72,6 +72,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int TAKE_PICTURE = 0;
     private static final int CHOOSE_PICTURE = 1;
+    private static final int VIDEO_CHAT = 2;
     private static final int SCALE = 5;//照片缩小比例
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class ChatActivity extends AppCompatActivity {
 
         userName = Util.getUsername(this);
 
-        friendId = getIntent().getStringExtra("friend_id");
+        //friendId = getIntent().getStringExtra("friend_id");
         friendName = getIntent().getStringExtra("friend_name");
         getSupportActionBar().setTitle(friendName);
 
@@ -98,17 +99,9 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new LvAdapter_Msg(this,dataArrays);
         listView.setAdapter(adapter);
 
-        TaskGetChatroomId taskGetChatroomId = new TaskGetChatroomId(friendId);
+        TaskGetChatroomId taskGetChatroomId = new TaskGetChatroomId(friendName);
         taskGetChatroomId.execute();
 
-//        btnVideo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setClass(ChatActivity.this, VideoChatActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -130,7 +123,7 @@ public class ChatActivity extends AppCompatActivity {
                         nextPage++;
                         pageCur = Integer.toString(nextPage);
                         // get next page
-                        getMsgL = new TaskGetMsgL(friendId,pageCur);
+                        getMsgL = new TaskGetMsgL(roomId,pageCur);
                         getMsgL.execute();
 
                         Toast.makeText(ChatActivity.this,"load page " + pageCur,Toast.LENGTH_SHORT).show();
@@ -188,7 +181,7 @@ public class ChatActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
               //  listView.setAdapter(adapter);
                 Log.e("refresh","get");
-                getMsgL = new TaskGetMsgL(friendId,"1");
+                getMsgL = new TaskGetMsgL(roomId,"1");
                 getMsgL.execute();
                 Log.e("update","refresh");
         }
@@ -221,9 +214,9 @@ public class ChatActivity extends AppCompatActivity {
 
     public void showPicturePicker(Context context){
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setTitle("图片来源");
-        builder.setNegativeButton("取消", null);
-        builder.setItems(new String[]{"拍照","相册"}, new DialogInterface.OnClickListener() {
+//        builder.setTitle("图片来源");
+        builder.setNegativeButton("cancel", null);
+        builder.setItems(new String[]{"camera","album","videoChat"}, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -241,7 +234,14 @@ public class ChatActivity extends AppCompatActivity {
                         openAlbumIntent.setType("image/*");
                         startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                         break;
-
+                    case VIDEO_CHAT:
+                        postContent = "chatroom_id=" + roomId + "&sender_name=" + userName + "&receiver_name=" + friendName + "&message=#video chat invite#";
+                        TaskPostMsg postMsg = new TaskPostMsg(postContent);
+                        postMsg.execute();
+                        Intent intent = new Intent();
+                        intent.setClass(ChatActivity.this, VideoActivity.class);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }
@@ -318,7 +318,7 @@ public class ChatActivity extends AppCompatActivity {
             entity.setMessage(content);
             entity.setUserName(userName);
             entity.setTimestamp(getDate());
-            entity.setIsComMsg(true);
+            entity.setIsComMsg(false);
             entity.setMsgType("text");
             dataArrays.add(entity);
             adapter.notifyDataSetChanged();
@@ -376,8 +376,8 @@ public class ChatActivity extends AppCompatActivity {
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
         private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getChatRoomId";
 
-        public TaskGetChatroomId(String friendId) {
-            this.jsonUrl = this.jsonUrl + "?friend_id=" + friendId + "&owner_name=" + Util.getUsername(ChatActivity.this);
+        public TaskGetChatroomId(String friendName) {
+            this.jsonUrl = this.jsonUrl + "?friend_name=" + friendName + "&owner_name=" + Util.getUsername(ChatActivity.this);
         }
 
         @Override

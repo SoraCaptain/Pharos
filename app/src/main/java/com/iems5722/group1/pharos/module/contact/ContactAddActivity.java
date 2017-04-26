@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.module.chat.ChatActivity;
+import com.iems5722.group1.pharos.module.chatrooms.ChatRoomListActivity;
 import com.iems5722.group1.pharos.utils.Util;
 
 import org.json.JSONObject;
@@ -104,8 +106,13 @@ public class ContactAddActivity extends AppCompatActivity {
                 btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TaskAdd taskAdd = new TaskAdd(edSearchContent.getText().toString());
-                        taskAdd.execute();
+                        if(Util.getUsername(ContactAddActivity.this).equals("null")){
+                            Toast.makeText(ContactAddActivity.this,"please login first",Toast.LENGTH_SHORT);
+                        }
+                        else {
+                            TaskAdd taskAdd = new TaskAdd(edSearchContent.getText().toString());
+                            taskAdd.execute();
+                        }
                     }
                 });
             }
@@ -117,7 +124,15 @@ public class ContactAddActivity extends AppCompatActivity {
                 btnAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if(Util.getUsername(ContactAddActivity.this).equals("null")){
+                            Toast.makeText(ContactAddActivity.this,"please login first",Toast.LENGTH_SHORT);
+                        }
+                        else {
+                            Intent intent = new Intent();
+                            intent.putExtra("friend_name", name);
+                            intent.setClass(ContactAddActivity.this, ChatActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
             }
