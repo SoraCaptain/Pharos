@@ -60,7 +60,7 @@ public class LvAdapter_Home extends BaseAdapter {
         viewHolder.tvType.setText(entity.getPlaceType());
         viewHolder.tvRate.setText(entity.getPlaceRate());
         //viewHolder.ivImg.setImageBitmap(entity.getPlaceImg());
-        String url="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + entity.getPlacePhotoPre() + "&key=AIzaSyARMqBMqfTYhi6NrUuF7RmvoJ69yBTynYA";
+        String url="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=" + entity.getPlacePhotoPre() + "&key=AIzaSyARMqBMqfTYhi6NrUuF7RmvoJ69yBTynYA";
         Glide.with(mInflater.getContext())
                 .load(url)
                 .centerCrop()

@@ -22,11 +22,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iems5722.group1.pharos.Constants;
 import com.iems5722.group1.pharos.R;
+import com.iems5722.group1.pharos.fragment.subfragment.location.LocationDetailActivity;
+import com.iems5722.group1.pharos.module.favorite.FavActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -113,6 +116,15 @@ public class HomeFragment extends Fragment{
             }
         };
         configure_button();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent();
+                intent.putExtra("PlaceId", location_list.get(position).getPlaceId());
+                intent.setClass(getActivity(), LocationDetailActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
     private void showLocation(Location location) {
@@ -192,8 +204,8 @@ public class HomeFragment extends Fragment{
                         String typearray= "";
                         if(!jsonObject_1.isNull("types")){
                             JSONArray jsonArray_2 = jsonObject_1.getJSONArray("types");
-                            for(int j = 0; j < jsonArray_2.length(); j++){
-                                typearray = typearray + jsonArray_2.get(j) + ";";
+                            for(int j = 0; j < 3; j++){
+                                typearray = typearray + jsonArray_2.get(j) + "; ";
                             }
                             Log.e("typearray", typearray);
                             location.setPlaceType(typearray);

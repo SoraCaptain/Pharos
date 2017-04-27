@@ -92,7 +92,7 @@
             android:layout_below="@id/tvAdd"
             android:layout_marginTop="15dp"
             android:paddingStart="20dp"
-
+            android:autoLink="phone"
             android:textSize="20dp"/>
         <TextView
             android:layout_width="match_parent"

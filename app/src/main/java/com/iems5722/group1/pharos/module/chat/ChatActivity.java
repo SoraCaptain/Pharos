@@ -467,6 +467,20 @@ public class ChatActivity extends AppCompatActivity {
         entity.setUserName(sender_name);
         entity.setTimestamp(getDate());
         entity.setIsComMsg(true);
+        String[] msgs = entity.getMessage().split("\n");
+        if(msgs.length>0){
+            String[] special = msgs[0].split("~");
+
+            if(special.length==2 && special[1].equals("share place")){
+                entity.setMsgType("map");
+            }
+            else{
+                entity.setMsgType("text");
+            }
+        }
+        else{
+            entity.setMsgType("text");
+        }
         dataArrays.add(entity);
         adapter.notifyDataSetChanged();
         edt_input.setText("");
@@ -574,7 +588,7 @@ public class ChatActivity extends AppCompatActivity {
                         String[] msg = entity.message.split("\n");
                         if(msg.length>0){
                             String[] special = msg[0].split("~");
-
+                            Log.e("long",String.valueOf(special.length));
                             if(special.length==2 && special[1].equals("share place")){
                                 entity.msgType = "map";
                             }
@@ -603,9 +617,10 @@ public class ChatActivity extends AppCompatActivity {
     class TaskGetPlaceId extends AsyncTask<String, Integer, String>{
 
         // private String jsonUrl = "http://iems5722.albertauyeung.com/api/asgn2/get_messages";
-        private String jsonUrl = "http://54.202.138.123:5000/pharos/api/getPlaceId";
+        private String jsonUrl = "http://54.202.138.123:8000/pharos/api/getPlaceId";
 
         public TaskGetPlaceId(String placeName) {
+            placeName = placeName.replace(" ","%20");
             this.jsonUrl = this.jsonUrl + "?place_name=" + placeName;
         }
 

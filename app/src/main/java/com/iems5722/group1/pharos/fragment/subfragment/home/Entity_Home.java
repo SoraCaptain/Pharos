@@ -45,7 +45,6 @@ public class Entity_Home {
         return this.placeRate;
     }
     public void setPlaceImg(Bitmap placeImg){
-        Log.e("Set","img");
         this.placeImg = placeImg;
     }
     public Bitmap getPlaceImg(){

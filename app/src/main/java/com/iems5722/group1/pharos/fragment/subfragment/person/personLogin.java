@@ -147,7 +147,7 @@ public class personLogin extends AppCompatActivity {
                                 Log.e("test", "onDataReceivedSuccess");
                                 if (result.equals("SUCCESS")){
                                     Util.setUserName(edName.getText().toString(),personLogin.this);
-                                    Toast.makeText(personLogin.this,"register successfully",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(personLogin.this,"login successfully",Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(personLogin.this,MainActivity.class);
                                     intent.putExtra("userloginflag", 3);
                                     startActivity(intent);

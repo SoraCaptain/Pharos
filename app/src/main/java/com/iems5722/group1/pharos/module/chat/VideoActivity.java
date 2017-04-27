@@ -52,9 +52,7 @@ public class VideoActivity extends AppCompatActivity {
     /*
      * You must provide a Twilio Access Token to connect to the Video service
      */
-    private static final String TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2YwMDg4MGFkODFiMTAwMWRlYTU1ODRjMjk4M2I5MGU2LTE0OTMxMzE4NTciLCJpc3MiOiJTS2YwMDg4MGFkODFiMTAwMWRlYTU1ODRjMjk4M2I5MGU2Iiwic3ViIjoiQUNlODU3ZjQ3ODUyYjk2OGVmMTI5MDY4NWQwZDNlM2M3ZiIsImV4cCI6MTQ5MzEzNTQ1NywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiQm9iYnkiLCJydGMiOnsiY29uZmlndXJhdGlvbl9wcm9maWxlX3NpZCI6IlZTOTJmY2Q3NWE2OTdiZmU1YmRlNDI2MTUxYmNlNjc4YTAifX19.SGrRRWjCgWsQ3JY3JjuWhn30Spo6aUyhKp2ldVRbA7Y";
-
-
+    private static final String TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2YwMDg4MGFkODFiMTAwMWRlYTU1ODRjMjk4M2I5MGU2LTE0OTMyMTc4NDMiLCJpc3MiOiJTS2YwMDg4MGFkODFiMTAwMWRlYTU1ODRjMjk4M2I5MGU2Iiwic3ViIjoiQUNlODU3ZjQ3ODUyYjk2OGVmMTI5MDY4NWQwZDNlM2M3ZiIsImV4cCI6MTQ5MzIyMTQ0MywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiU29yYSIsInZpZGVvIjp7fX19.Kprq7FC0QbyhG2988brai_somd0gCjlHK4L2XWISxQ8";
     /*
      * Access token used to connect. This field will be set either from the console generated token
      * or the request to the token server.
